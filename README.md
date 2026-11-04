@@ -118,7 +118,12 @@ buscadores o ignoram. O painel continua protegido por `noindex`; com domínio pr
       laranja não tem contraste AA com texto branco) e fundo `#EEF4F6`; logotipo horizontal e símbolo oficiais.
 - [ ] **Confirmar o nome exibido**: o logotipo diz “Honorato Freitas Benefícios”, enquanto os textos do site usam
       “HF Seguros e Benefícios”.
-- [ ] Fonte oficial da marca (só vieram PNGs). O site usa Plus Jakarta Sans, geométrica e próxima do logotipo.
+- [x] Tipografia: títulos em **Century Gothic** (fonte do logotipo), usada **somente se instalada no aparelho do
+      visitante** — os arquivos da Monotype não são publicados, pois a cópia do cliente (Windows/Office) não cobre
+      uso web. Sem ela, os títulos usam **Jost** (OFL, hospedada no site). Textos corridos em Plus Jakarta Sans.
+      Para o visual idêntico em todos os aparelhos, o cliente pode adquirir a licença web da Century Gothic.
+      *Champagne & Limousines* (só uso pessoal; web exige autorização da autora) e *Big Noodle Titling* (livre,
+      condensada) não foram usadas.
 - [ ] **Confirmar o formulário com envio ao WhatsApp** e informar o número (`whatsappNumber` em
       `settings.json`, formato `55DDDNUMERO`). Até lá, o formulário informa que o canal está em configuração.
 - [ ] **Confirmar plataformas e URLs** de `@hfbeneficios.mt` e `@hfbeneficios` (`social` em `settings.json`).

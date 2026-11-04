@@ -1,4 +1,5 @@
 import '@fontsource-variable/plus-jakarta-sans/wght.css'
+import '@fontsource-variable/jost/wght.css'
 import 'virtual:hf-theme.css'
 import '../site/styles/global.css'
 import { StrictMode } from 'react'

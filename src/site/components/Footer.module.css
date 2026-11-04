@@ -48,9 +48,10 @@
 
 .ctaTitle {
   max-width: 560px;
+  font-family: var(--font-display);
   font-size: var(--text-2xl);
-  font-weight: 750;
-  letter-spacing: -0.03em;
+  font-weight: 700;
+  letter-spacing: var(--tracking-display);
   line-height: 1.1;
   text-wrap: balance;
 }

@@ -27,6 +27,13 @@
 
   --font: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
     Roboto, Arial, sans-serif;
+  /*
+   * Tipografia da marca nos títulos: Century Gothic (Monotype), usada apenas se instalada no aparelho
+   * do visitante — o arquivo NÃO é publicado, pois a licença não cobre uso web. Sem ela, Jost (OFL),
+   * geométrica e próxima, é carregada do próprio site.
+   */
+  --font-display: 'Century Gothic', 'CenturyGothic', 'Jost Variable', 'Jost', var(--font);
+  --tracking-display: -0.015em;
 
   --text-xs: 0.8125rem;
   --text-sm: 0.9375rem;
@@ -107,8 +114,9 @@ h1,
 h2,
 h3,
 h4 {
+  font-family: var(--font-display);
   line-height: 1.12;
-  letter-spacing: -0.025em;
+  letter-spacing: var(--tracking-display);
   font-weight: 700;
   text-wrap: balance;
 }
