@@ -30,7 +30,11 @@ const CSP_SITE = [
   "form-action 'self'",
 ].join('; ')
 
-const CSP_ADMIN = CSP_SITE.replace("frame-src 'none'", "frame-src 'self'")
+// O painel conversa somente com a API oficial do GitHub, além da própria origem.
+const CSP_ADMIN = CSP_SITE.replace("frame-src 'none'", "frame-src 'self'").replace(
+  "connect-src 'self'",
+  "connect-src 'self' https://api.github.com",
+)
 
 export function hfSeoPlugin({ siteUrl }: Options): Plugin {
   let config: ResolvedConfig
@@ -118,6 +122,12 @@ export function hfSeoPlugin({ siteUrl }: Options): Plugin {
       const today = new Date().toISOString().slice(0, 10)
       const settings = read<Settings>('settings.json')
 
+      // O painel consulta este arquivo para confirmar que o commit publicado já está no ar.
+      this.emitFile({
+        type: 'asset',
+        fileName: 'build-info.json',
+        source: `${JSON.stringify({ commit: process.env.GITHUB_SHA ?? 'local', builtAt: new Date().toISOString() })}\n`,
+      })
       this.emitFile({
         type: 'asset',
         fileName: 'robots.txt',

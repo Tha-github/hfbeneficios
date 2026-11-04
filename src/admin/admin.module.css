@@ -25,6 +25,113 @@
   transform: none;
 }
 
+/* ---------- Tela de acesso ---------- */
+
+.gate {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 24px var(--gutter);
+  background:
+    radial-gradient(800px 480px at 85% 0%, color-mix(in srgb, var(--brand) 18%, transparent), transparent 65%),
+    radial-gradient(600px 400px at 0% 100%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 65%),
+    var(--surface-tint);
+}
+
+.gateCard {
+  display: grid;
+  gap: 20px;
+  width: 100%;
+  max-width: 440px;
+  padding: clamp(24px, 5vw, 40px);
+  border: 1px solid rgb(255 255 255 / 0.9);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.gateTitle {
+  font-size: var(--text-xl);
+}
+
+.gateForm {
+  display: grid;
+  gap: 16px;
+}
+
+.gateForm .field {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.gateForm .field > label {
+  font-size: var(--text-sm);
+  font-weight: 650;
+}
+
+.passwordRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.toggleButton {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  min-height: 46px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink-muted);
+}
+
+.toggleButton[aria-pressed='true'] {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.toggleButton svg {
+  width: 20px;
+  height: 20px;
+}
+
+.help {
+  font-size: var(--text-sm);
+}
+
+.help summary {
+  color: var(--brand-strong);
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.help ol {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+  padding-left: 20px;
+  list-style: decimal;
+  color: var(--ink-muted);
+}
+
+.logoutButton {
+  justify-self: start;
+  min-height: 36px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--on-dark-muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.logoutButton:hover {
+  color: #fff;
+}
+
 /* ---------- Barra lateral ---------- */
 
 .sidebar {

@@ -46,27 +46,50 @@ O painel permite **somente** editar textos existentes, substituir as duas imagen
 alternativo) e alterar as quatro cores autorizadas. Não há operação de criar/remover seções, itens ou páginas, e
 o schema fechado rejeita qualquer alteração estrutural, HTML ou script — no painel, no build e no CI.
 
-**Não existe login no painel, e isso é intencional.** Ele não guarda segredos e não grava nada no site: apenas
-gera arquivos validados. A autorização acontece no GitHub:
+### Acesso por senha
 
-1. No painel, edite, confira em **Pré-visualização** (o site real em iframe, nos tamanhos celular/tablet/computador)
-   e abra **Publicar**.
-2. Baixe `site.json` (e as imagens substituídas, já convertidas e com o nome correto).
-3. No GitHub, substitua `src/content/site.json` (e/ou envie as imagens para `public/images/`) e escolha
-   *Create a new branch for this commit and start a pull request*.
-4. O CI valida schema, imagens, lint, testes e build. Após revisão e merge em `main`, o deploy é automático.
+O painel abre somente com senha (mesmo modelo dos projetos Weiri e Conecta; exceção registrada no CLAUDE.md).
+A senha destrava uma **chave do GitHub** guardada em `public/admin/acesso.json` **cifrada** (AES-256-GCM,
+PBKDF2-SHA256 com 600 mil iterações). A senha não está escrita em nenhum arquivo e a chave fica apenas na memória
+da aba durante o uso — nada é salvo no navegador.
 
-O rascunho fica no `localStorage` do navegador apenas como conveniência (não é armazenamento definitivo;
-imagens não ficam no rascunho). Com `repository` preenchido em `settings.json`, o painel mostra links diretos
-para o editor e o upload do GitHub.
+**Configurar (uma vez, por quem mantém o site):**
+
+1. GitHub (conta dona do repositório) › Settings › Developer settings › Personal access tokens ›
+   **Fine-grained tokens** › Generate new token.
+2. *Repository access*: **Only select repositories** › `hfbeneficios`.
+3. *Repository permissions*: **Contents: Read and write**. Nenhuma outra permissão. Anote a data de expiração.
+4. Abra `/admin/`, cole a chave, defina a senha da cliente (mínimo de 12 caracteres; prefira uma frase) e salve.
+   O painel grava o `acesso.json` cifrado no repositório. Passe apenas a **senha** para a cliente.
+
+- Trocar a senha: dentro do painel, em **Acesso**.
+- Chave venceu ou foi revogada: na tela de entrada, **Reconfigurar acesso** (exige uma chave nova e válida).
+- Risco aceito: o arquivo cifrado é público; uma senha curta pode ser descoberta por tentativa offline e daria
+  permissão de escrita no repositório (exceto workflows). Use senha longa e chave com o menor escopo possível.
+
+### Publicar (para a cliente)
+
+1. Entre com a senha, edite e confira em **Pré-visualização** (o site real nos tamanhos celular/tablet/computador).
+2. Em **Publicar**, revise a lista de alterações e toque em **Publicar no site**.
+3. O painel envia tudo em **um único commit** na `main` ("Painel: atualização de conteúdo…"), grava apenas
+   `src/content/site.json` e as imagens de `public/images/`, e avisa quando o site já está no ar (cerca de 1 a 2 min).
+
+Se outra pessoa publicou depois que você entrou, o painel recusa a publicação em vez de sobrescrever. O deploy
+revalida o conteúdo no build; conteúdo inválido não chega ao ar. O rascunho fica no `localStorage` apenas como
+conveniência; a seção **Cópia de segurança** baixa/importa o `site.json`.
+
+Para quem mantém o código: cada publicação do painel vira um commit na `main`. Rode `git pull` antes de enviar
+alterações feitas no computador. Não edite `public/admin/acesso.json` à mão.
 
 ## Deploy no GitHub Pages
 
-1. Crie o repositório da HF (não usar o repositório Conecta Soluções) e envie este projeto.
-2. *Settings › Pages › Source*: **GitHub Actions**.
-3. *Settings › Branches*: proteja `main` exigindo Pull Request, aprovação e o check **CI / verify**.
-4. Preencha `repository` (`owner/repositorio`) em `src/content/settings.json`.
-5. Domínio próprio (quando houver): configure em *Settings › Pages*. `SITE_URL` e `BASE_PATH` são obtidos
+Repositório: `Tha-github/hfbeneficios` — site em https://tha-github.github.io/hfbeneficios/.
+
+1. *Settings › Pages › Source*: **GitHub Actions** (já feito).
+2. *Settings › Branches/Rules*: em `main`, bloqueie **force push** e **exclusão**. **Não** exija Pull Request:
+   o painel publica direto na `main`, e essa exigência bloquearia a publicação.
+3. Configure o acesso do painel (seção acima).
+4. Domínio próprio (quando houver): configure em *Settings › Pages*. `SITE_URL` e `BASE_PATH` são obtidos
    automaticamente de `actions/configure-pages`, então canonical, sitemap e Open Graph acompanham.
 
 Observação: em endereços `usuario.github.io/repositorio/`, o `robots.txt` não fica na raiz do domínio e os
@@ -74,7 +97,9 @@ buscadores o ignoram. O painel continua protegido por `noindex`; com domínio pr
 
 ## Segurança
 
-- Sem senhas, tokens ou autenticação simulada no código; a publicação depende das permissões do GitHub.
+- Painel por senha que destrava uma chave do GitHub cifrada (ver "Acesso por senha"); a chave só existe em memória,
+  com escopo restrito a este repositório e "Contents"; o painel só grava arquivos de conteúdo, em um único commit.
+  A CSP do painel só permite conexões com a própria origem e `api.github.com`.
 - Schema fechado: objetos estritos, listas de tamanho fixo, IDs e caminhos de imagem literais; textos sem `<`, `>`,
   caracteres de controle/bidirecionais ou `javascript:`/`data:`. React escapa todo texto e o lint proíbe HTML injetado.
 - Imagens: tipo declarado + assinatura real conferidos, decodificadas e **re-codificadas** via canvas (remove

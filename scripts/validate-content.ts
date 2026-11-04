@@ -6,9 +6,10 @@
  * - as imagens existentes têm formato real, dimensões e peso esperados;
  * - nenhum arquivo extra foi adicionado às pastas de conteúdo e de imagens.
  */
-import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { resolve } from 'node:path'
 import sharp from 'sharp'
+import { accessFileSchema } from '../src/admin/access'
 import { IMAGE_SLOTS, sniffImageType } from '../src/content/images'
 import { formatIssues, settingsSchema, siteSchema } from '../src/content/schema'
 
@@ -48,6 +49,20 @@ for (const file of readdirSync(resolve(root, 'src/content'))) {
 const allowedImages = new Set(IMAGE_SLOTS.map((slot) => slot.file.replace('images/', '')))
 for (const file of readdirSync(resolve(root, 'public/images'))) {
   if (!allowedImages.has(file)) errors.push(`public/images: arquivo não previsto "${file}" (só é permitido substituir imagens existentes)`)
+}
+
+// Arquivo de acesso do painel: opcional, mas, se existir, só pode conter o envelope cifrado.
+const adminDir = resolve(root, 'public/admin')
+if (existsSync(adminDir)) {
+  for (const file of readdirSync(adminDir)) {
+    if (file !== 'acesso.json') errors.push(`public/admin: arquivo não previsto "${file}"`)
+  }
+  if (existsSync(resolve(adminDir, 'acesso.json'))) {
+    const access = accessFileSchema.safeParse(readJson('public/admin/acesso.json'))
+    if (!access.success) {
+      for (const issue of formatIssues(access.error)) errors.push(`acesso.json › ${issue.path}: ${issue.message}`)
+    }
+  }
 }
 
 for (const slot of IMAGE_SLOTS) {

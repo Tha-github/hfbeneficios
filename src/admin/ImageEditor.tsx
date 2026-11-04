@@ -1,5 +1,5 @@
 import { useId, useState, type ChangeEvent } from 'react'
-import { assetUrl, publishedContent } from '../content'
+import { assetUrl } from '../content'
 import { IMAGE_SLOTS, type ImageSlot } from '../content/images'
 import type { SiteContent } from '../content/schema'
 import { Icon } from '../site/components/Icon'
@@ -12,6 +12,7 @@ export type ImageDrafts = Partial<Record<ImageSlot['id'], ProcessedImage>>
 
 interface ImageEditorProps {
   draft: SiteContent
+  baseline: SiteContent
   errors: Map<string, string>
   images: ImageDrafts
   onImages: (update: (current: ImageDrafts) => ImageDrafts) => void
@@ -23,13 +24,13 @@ const ALT_PATHS: Record<ImageSlot['id'], ['about', 'image', 'alt'] | ['meta', 'o
   og: ['meta', 'ogImageAlt'],
 }
 
-export function ImageEditor({ draft, errors, images, onImages, onChange }: ImageEditorProps) {
+export function ImageEditor({ draft, baseline, errors, images, onImages, onChange }: ImageEditorProps) {
   return (
     <div className={styles.imageGrid}>
       {IMAGE_SLOTS.map((slot) => {
         const altPath = ALT_PATHS[slot.id]
         const altValue = altPath[0] === 'about' ? draft.about.image.alt : draft.meta.ogImageAlt
-        const altOriginal = altPath[0] === 'about' ? publishedContent.about.image.alt : publishedContent.meta.ogImageAlt
+        const altOriginal = altPath[0] === 'about' ? baseline.about.image.alt : baseline.meta.ogImageAlt
         return (
           <ImageSlotCard
             key={slot.id}

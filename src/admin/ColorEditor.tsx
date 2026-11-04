@@ -1,5 +1,4 @@
 import { useId, useState } from 'react'
-import { publishedContent } from '../content'
 import { HEX_PATTERN } from '../content/color'
 import { COLOR_RULES, COLOR_TOKENS, type ColorToken, type SiteContent } from '../content/schema'
 import { Icon } from '../site/components/Icon'
@@ -12,11 +11,12 @@ const normalizeHex = (input: string) => {
 
 interface ColorEditorProps {
   draft: SiteContent
+  baseline: SiteContent
   errors: Map<string, string>
   onChange: (next: SiteContent) => void
 }
 
-export function ColorEditor({ draft, errors, onChange }: ColorEditorProps) {
+export function ColorEditor({ draft, baseline, errors, onChange }: ColorEditorProps) {
   const theme = draft.theme
   const allValid = COLOR_TOKENS.every((t) => HEX_PATTERN.test(theme[t]))
   const setToken = (token: ColorToken, value: string) => onChange({ ...draft, theme: { ...theme, [token]: value } })
@@ -36,7 +36,7 @@ export function ColorEditor({ draft, errors, onChange }: ColorEditorProps) {
             key={token}
             token={token}
             value={theme[token]}
-            original={publishedContent.theme[token]}
+            original={baseline.theme[token]}
             checks={allValid ? COLOR_RULES[token].check(theme) : []}
             error={errors.get(`theme.${token}`)}
             onChange={(value) => setToken(token, value)}

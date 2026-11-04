@@ -1,9 +1,17 @@
 import { useState, type ChangeEvent } from 'react'
 import { IMAGE_SLOTS } from '../content/images'
-import { siteSchema, type Settings, type SiteContent } from '../content/schema'
+import { siteSchema, type SiteContent } from '../content/schema'
 import { Icon } from '../site/components/Icon'
 import { parseImportedContent, serializeContent } from './draftStorage'
 import type { Change } from './fields'
+import {
+  blobToBase64,
+  describeGitHubError,
+  utf8ToBase64,
+  type FileToCommit,
+  type GitHubClient,
+  type WritablePath,
+} from './github'
 import type { ImageDrafts } from './ImageEditor'
 import styles from './admin.module.css'
 
@@ -12,8 +20,36 @@ interface PublishPanelProps {
   errors: Map<string, string>
   changes: Change[]
   images: ImageDrafts
-  settings: Settings
+  client: GitHubClient
+  baselineSha: string | null
+  onPublished: (content: SiteContent, sha: string | null) => void
   onImport: (content: SiteContent) => void
+}
+
+type Phase =
+  | { kind: 'idle' }
+  | { kind: 'sending' }
+  | { kind: 'deploying' }
+  | { kind: 'live' }
+  | { kind: 'slow' }
+  | { kind: 'error'; message: string }
+
+const DEPLOY_POLL_MS = 10_000
+const DEPLOY_TIMEOUT_MS = 6 * 60_000
+
+/** Aguarda o GitHub Pages servir o build do commit publicado (build-info.json gerado no deploy). */
+async function waitForDeploy(commit: string): Promise<boolean> {
+  const deadline = Date.now() + DEPLOY_TIMEOUT_MS
+  while (Date.now() < deadline) {
+    await new Promise((resolve) => setTimeout(resolve, DEPLOY_POLL_MS))
+    try {
+      const response = await fetch(`${import.meta.env.BASE_URL}build-info.json?v=${Date.now()}`, { cache: 'no-store' })
+      if (response.ok && ((await response.json()) as { commit?: string }).commit === commit) return true
+    } catch {
+      /* tenta de novo no próximo ciclo */
+    }
+  }
+  return false
 }
 
 function download(blob: Blob, filename: string) {
@@ -28,35 +64,40 @@ function download(blob: Blob, filename: string) {
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
-/*
- * Fluxo seguro de publicação, sem credenciais no frontend:
- * o painel exporta arquivos validados; a gravação acontece no GitHub, com a conta
- * autorizada do responsável, por meio de um Pull Request que passa pelo CI.
- */
-export function PublishPanel({ draft, errors, changes, images, settings, onImport }: PublishPanelProps) {
+export function PublishPanel({ draft, errors, changes, images, client, baselineSha, onPublished, onImport }: PublishPanelProps) {
+  const [phase, setPhase] = useState<Phase>({ kind: 'idle' })
   const [message, setMessage] = useState<{ kind: 'ok' | 'error'; text: string } | null>(null)
   const valid = errors.size === 0
   const changedImages = IMAGE_SLOTS.filter((slot) => images[slot.id])
-  const hasChanges = changes.length > 0 || changedImages.length > 0
-  const repo = settings.repository
-  const githubEdit = repo ? `https://github.com/${repo}/edit/${settings.branch}/src/content/site.json` : null
-  const githubUpload = repo ? `https://github.com/${repo}/upload/${settings.branch}/public/images` : null
+  const total = changes.length + changedImages.length
+  const busy = phase.kind === 'sending'
+
+  const publish = async () => {
+    const parsed = siteSchema.safeParse(draft)
+    if (!parsed.success || total === 0 || busy) return
+    setPhase({ kind: 'sending' })
+    try {
+      const remote = await client.readFile('src/content/site.json')
+      if (baselineSha && remote && remote.sha !== baselineSha) {
+        throw new Error('O conteúdo do site foi alterado em outro acesso depois que você entrou. Saia, entre de novo e refaça a alteração.')
+      }
+      const files: FileToCommit[] = []
+      if (changes.length > 0) files.push({ path: 'src/content/site.json', base64: utf8ToBase64(serializeContent(parsed.data)) })
+      for (const slot of changedImages) {
+        files.push({ path: `public/${slot.file}` as WritablePath, base64: await blobToBase64(images[slot.id]!.blob) })
+      }
+      const { commit, blobs } = await client.commitFiles(files, `Painel: atualização de conteúdo (${total} alteração(ões))`)
+      onPublished(parsed.data, blobs['src/content/site.json'] ?? baselineSha)
+      setPhase({ kind: 'deploying' })
+      setPhase({ kind: (await waitForDeploy(commit)) ? 'live' : 'slow' })
+    } catch (error) {
+      setPhase({ kind: 'error', message: describeGitHubError(error) })
+    }
+  }
 
   const exportJson = () => {
     const parsed = siteSchema.safeParse(draft)
-    if (!parsed.success) return
-    download(new Blob([serializeContent(parsed.data)], { type: 'application/json' }), 'site.json')
-  }
-
-  const copyJson = async () => {
-    const parsed = siteSchema.safeParse(draft)
-    if (!parsed.success) return
-    try {
-      await navigator.clipboard.writeText(serializeContent(parsed.data))
-      setMessage({ kind: 'ok', text: 'Conteúdo copiado. Cole-o no editor do GitHub substituindo todo o arquivo.' })
-    } catch {
-      setMessage({ kind: 'error', text: 'Não foi possível copiar. Use “Baixar site.json”.' })
-    }
+    if (parsed.success) download(new Blob([serializeContent(parsed.data)], { type: 'application/json' }), 'site.json')
   }
 
   const importFile = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -91,7 +132,7 @@ export function PublishPanel({ draft, errors, changes, images, settings, onImpor
           <div className={styles.alertError} role="alert">
             <Icon name="alert" />
             <div>
-              <p>Corrija os itens abaixo antes de exportar:</p>
+              <p>Corrija os itens abaixo antes de publicar:</p>
               <ul className={styles.errorList}>
                 {[...errors.entries()].map(([path, msg]) => (
                   <li key={path}>
@@ -106,10 +147,10 @@ export function PublishPanel({ draft, errors, changes, images, settings, onImpor
 
       <section className={styles.card} aria-labelledby="pub-changes">
         <h2 id="pub-changes" className={styles.cardTitle}>
-          Alterações ({changes.length + changedImages.length})
+          Alterações ({total})
         </h2>
-        {!hasChanges && <p className={styles.cardText}>Nenhuma alteração em relação ao site publicado.</p>}
-        {hasChanges && (
+        {total === 0 && <p className={styles.cardText}>Nenhuma alteração em relação ao site publicado.</p>}
+        {total > 0 && (
           <ul className={styles.changeList}>
             {changes.map((change) => (
               <li key={change.key}>
@@ -134,96 +175,67 @@ export function PublishPanel({ draft, errors, changes, images, settings, onImpor
         )}
       </section>
 
-      <section className={styles.card} aria-labelledby="pub-steps">
-        <h2 id="pub-steps" className={styles.cardTitle}>
-          Publicar com segurança
+      <section className={styles.card} aria-labelledby="pub-go">
+        <h2 id="pub-go" className={styles.cardTitle}>
+          Publicar
         </h2>
         <p className={styles.cardText}>
-          Este painel não possui senha nem grava no site diretamente. A publicação acontece no GitHub, com a sua
-          conta autorizada, por meio de um Pull Request validado automaticamente.
+          As alterações são enviadas ao GitHub em uma única atualização. O site é revalidado e republicado
+          automaticamente em cerca de 1 a 2 minutos.
         </p>
-        <ol className={styles.steps}>
-          <li>
-            <strong>Exporte o conteúdo</strong>
-            <span className={styles.buttonRow}>
-              <button type="button" className={styles.primaryButton} disabled={!valid || changes.length === 0} onClick={exportJson}>
-                <Icon name="download" />
-                Baixar site.json
-              </button>
-              <button type="button" className={styles.ghostButton} disabled={!valid || changes.length === 0} onClick={copyJson}>
-                <Icon name="copy" />
-                Copiar conteúdo
-              </button>
-            </span>
-            {changedImages.length > 0 && (
-              <span className={styles.buttonRow}>
-                {changedImages.map((slot) => (
-                  <button
-                    key={slot.id}
-                    type="button"
-                    className={styles.ghostButton}
-                    onClick={() => download(images[slot.id]!.blob, slot.file.split('/').pop()!)}
-                  >
-                    <Icon name="download" />
-                    Baixar {slot.file.split('/').pop()}
-                  </button>
-                ))}
-              </span>
-            )}
-          </li>
-          <li>
-            <strong>Envie pelo GitHub</strong>
-            {repo ? (
-              <span className={styles.buttonRow}>
-                {changes.length > 0 && (
-                  <a className={styles.ghostButton} href={githubEdit!} target="_blank" rel="noopener noreferrer">
-                    Editar src/content/site.json
-                    <Icon name="arrowUpRight" />
-                  </a>
-                )}
-                {changedImages.length > 0 && (
-                  <a className={styles.ghostButton} href={githubUpload!} target="_blank" rel="noopener noreferrer">
-                    Enviar imagens para public/images
-                    <Icon name="arrowUpRight" />
-                  </a>
-                )}
-              </span>
-            ) : (
-              <span className={styles.cardText}>
-                O repositório ainda não foi configurado em <code>src/content/settings.json</code>. Envie os arquivos
-                exportados ao responsável técnico.
-              </span>
-            )}
-            <span className={styles.cardText}>
-              Substitua o arquivo inteiro (mesmo nome) e, ao salvar, escolha “Create a new branch for this commit and
-              start a pull request”.
-            </span>
-          </li>
-          <li>
-            <strong>Revise e aprove</strong>
-            <span className={styles.cardText}>
-              O CI valida o schema, as imagens e o build. Após aprovação e merge na branch principal, o GitHub Pages
-              publica o site automaticamente.
-            </span>
-          </li>
-        </ol>
+        <span className={styles.buttonRow}>
+          <button type="button" className={styles.primaryButton} disabled={!valid || total === 0 || busy} onClick={publish}>
+            <Icon name="upload" />
+            {busy ? 'Enviando…' : 'Publicar no site'}
+          </button>
+        </span>
+        <div role="status" aria-live="polite">
+          {phase.kind === 'deploying' && (
+            <p className={styles.alertWarn}>
+              <Icon name="sparkle" />
+              Salvo! Publicando no site… você pode continuar editando.
+            </p>
+          )}
+          {phase.kind === 'live' && (
+            <p className={styles.alertOk}>
+              <Icon name="check" />
+              Pronto: as alterações já estão no ar.
+            </p>
+          )}
+          {phase.kind === 'slow' && (
+            <p className={styles.alertWarn}>
+              <Icon name="alert" />
+              As alterações foram salvas, mas a publicação está demorando. Confira o site em alguns minutos; se não
+              aparecer, avise quem mantém o site.
+            </p>
+          )}
+        </div>
+        {phase.kind === 'error' && (
+          <p className={styles.alertError} role="alert">
+            <Icon name="alert" />
+            {phase.message}
+          </p>
+        )}
       </section>
 
-      <section className={styles.card} aria-labelledby="pub-import">
-        <h2 id="pub-import" className={styles.cardTitle}>
-          Retomar um rascunho
-        </h2>
-        <p className={styles.cardText}>Carregue um site.json exportado anteriormente. O arquivo precisa seguir o formato fechado.</p>
-        <label className={styles.uploadButton}>
-          <Icon name="upload" />
-          Importar site.json
-          <input type="file" accept="application/json,.json" className="sr-only" onChange={importFile} />
-        </label>
-      </section>
-
-      <div role="status" aria-live="polite">
-        {message && <p className={message.kind === 'ok' ? styles.alertOk : styles.alertError}>{message.text}</p>}
-      </div>
+      <details className={`${styles.card} ${styles.help}`}>
+        <summary>Cópia de segurança do conteúdo</summary>
+        <p className={styles.cardText}>Baixe o conteúdo atual do rascunho ou retome um arquivo baixado anteriormente.</p>
+        <span className={styles.buttonRow}>
+          <button type="button" className={styles.ghostButton} disabled={!valid} onClick={exportJson}>
+            <Icon name="download" />
+            Baixar site.json
+          </button>
+          <label className={styles.uploadButton}>
+            <Icon name="upload" />
+            Importar site.json
+            <input type="file" accept="application/json,.json" className="sr-only" onChange={importFile} />
+          </label>
+        </span>
+        <div role="status" aria-live="polite">
+          {message && <p className={message.kind === 'ok' ? styles.alertOk : styles.alertError}>{message.text}</p>}
+        </div>
+      </details>
     </div>
   )
 }

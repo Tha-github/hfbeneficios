@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { publishedContent, settings } from '../content'
+import { settings } from '../content'
 import type { SiteContent } from '../content/schema'
 import { Icon, type IconName } from '../site/components/Icon'
 import { Logo } from '../site/components/Logo'
+import type { AdminSession } from './AccessGate'
+import { AccessPanel } from './AccessPanel'
 import { ColorEditor } from './ColorEditor'
 import { clearDraft, loadDraft, saveDraft } from './draftStorage'
 import { diffContent, validationErrors } from './fields'
@@ -12,7 +14,7 @@ import { PublishPanel } from './PublishPanel'
 import { TextEditor } from './TextEditor'
 import styles from './admin.module.css'
 
-type View = 'texts' | 'images' | 'colors' | 'preview' | 'publish'
+type View = 'texts' | 'images' | 'colors' | 'preview' | 'publish' | 'access'
 
 const VIEWS: { id: View; label: string; icon: IconName }[] = [
   { id: 'texts', label: 'Textos', icon: 'text' },
@@ -20,17 +22,20 @@ const VIEWS: { id: View; label: string; icon: IconName }[] = [
   { id: 'colors', label: 'Cores', icon: 'palette' },
   { id: 'preview', label: 'Pré-visualização', icon: 'eye' },
   { id: 'publish', label: 'Publicar', icon: 'upload' },
+  { id: 'access', label: 'Acesso', icon: 'lock' },
 ]
 
-export function AdminApp() {
+export function AdminApp({ session }: { session: AdminSession }) {
+  const [baseline, setBaseline] = useState<SiteContent>(session.baseline)
+  const [baselineSha, setBaselineSha] = useState(session.baselineSha)
   const [initial] = useState(() => loadDraft())
-  const [draft, setDraft] = useState<SiteContent>(initial?.content ?? publishedContent)
+  const [draft, setDraft] = useState<SiteContent>(initial?.content ?? session.baseline)
   const [savedAt, setSavedAt] = useState<string | null>(initial?.savedAt ?? null)
   const [images, setImages] = useState<ImageDrafts>({})
   const [view, setView] = useState<View>('texts')
   const headingRef = useRef<HTMLHeadingElement>(null)
 
-  const changes = useMemo(() => diffContent(publishedContent, draft), [draft])
+  const changes = useMemo(() => diffContent(baseline, draft), [baseline, draft])
   const errors = useMemo(() => validationErrors(draft), [draft])
   const imageChanges = Object.keys(images).length
   const totalChanges = changes.length + imageChanges
@@ -38,7 +43,7 @@ export function AdminApp() {
   // Salva o rascunho localmente a cada alteração (conveniência, não publicação).
   const updateDraft = (next: SiteContent) => {
     setDraft(next)
-    if (diffContent(publishedContent, next).length === 0) {
+    if (diffContent(baseline, next).length === 0) {
       clearDraft()
       setSavedAt(null)
     } else {
@@ -46,7 +51,7 @@ export function AdminApp() {
     }
   }
 
-  // Avisa antes de sair com imagens não exportadas (elas não ficam no rascunho local).
+  // Avisa antes de sair com imagens não publicadas (elas não ficam no rascunho local).
   useEffect(() => {
     if (imageChanges === 0) return
     const onBeforeUnload = (event: BeforeUnloadEvent) => event.preventDefault()
@@ -59,10 +64,29 @@ export function AdminApp() {
     requestAnimationFrame(() => headingRef.current?.focus())
   }
 
-  const discardAll = () => {
+  const resetImages = () => {
     for (const image of Object.values(images)) if (image) URL.revokeObjectURL(image.url)
     setImages({})
-    updateDraft(publishedContent)
+  }
+
+  const discardAll = () => {
+    resetImages()
+    updateDraft(baseline)
+  }
+
+  /** Após publicar, o rascunho vira a nova referência. */
+  const onPublished = (content: SiteContent, sha: string | null) => {
+    setBaseline(content)
+    if (sha) setBaselineSha(sha)
+    setDraft(content)
+    clearDraft()
+    setSavedAt(null)
+    resetImages()
+  }
+
+  const logout = () => {
+    resetImages()
+    session.logout()
   }
 
   const current = VIEWS.find((v) => v.id === view)!
@@ -117,6 +141,9 @@ export function AdminApp() {
             Ver site publicado
             <Icon name="arrowUpRight" />
           </a>
+          <button type="button" className={styles.logoutButton} onClick={logout}>
+            Sair do painel
+          </button>
         </div>
       </aside>
 
@@ -146,11 +173,18 @@ export function AdminApp() {
           )}
         </header>
 
-        {view === 'texts' && <TextEditor draft={draft} errors={errors} onChange={updateDraft} />}
+        {view === 'texts' && <TextEditor draft={draft} baseline={baseline} errors={errors} onChange={updateDraft} />}
         {view === 'images' && (
-          <ImageEditor draft={draft} errors={errors} images={images} onImages={setImages} onChange={updateDraft} />
+          <ImageEditor
+            draft={draft}
+            baseline={baseline}
+            errors={errors}
+            images={images}
+            onImages={setImages}
+            onChange={updateDraft}
+          />
         )}
-        {view === 'colors' && <ColorEditor draft={draft} errors={errors} onChange={updateDraft} />}
+        {view === 'colors' && <ColorEditor draft={draft} baseline={baseline} errors={errors} onChange={updateDraft} />}
         {view === 'preview' && <PreviewPane draft={draft} images={images} />}
         {view === 'publish' && (
           <PublishPanel
@@ -158,10 +192,13 @@ export function AdminApp() {
             errors={errors}
             changes={changes}
             images={images}
-            settings={settings}
+            client={session.client}
+            baselineSha={baselineSha}
+            onPublished={onPublished}
             onImport={updateDraft}
           />
         )}
+        {view === 'access' && <AccessPanel session={session} onLogout={logout} />}
       </main>
     </div>
   )

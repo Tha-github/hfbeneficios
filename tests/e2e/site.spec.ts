@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
+import { loginAdmin } from './helpers'
 
 const WIDTHS = [320, 375, 390, 430, 768, 1024, 1440, 1920]
 
@@ -154,7 +155,7 @@ test.describe('SEO e segurança', () => {
   })
 
   test('prévia ignora mensagens fora do protocolo e conteúdo inválido', async ({ page }) => {
-    await page.goto('/admin/')
+    await loginAdmin(page)
     await page.getByRole('button', { name: 'Pré-visualização' }).click()
     const frame = page.frameLocator('iframe')
     await expect(frame.getByRole('heading', { level: 1 })).toBeVisible()

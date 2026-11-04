@@ -1,5 +1,4 @@
 import { useId, useMemo, useState } from 'react'
-import { publishedContent } from '../content'
 import type { SiteContent } from '../content/schema'
 import { Icon } from '../site/components/Icon'
 import { SECTIONS, collectTextFields, getAt, setText, type TextField } from './fields'
@@ -7,11 +6,12 @@ import styles from './admin.module.css'
 
 interface TextEditorProps {
   draft: SiteContent
+  baseline: SiteContent
   errors: Map<string, string>
   onChange: (next: SiteContent) => void
 }
 
-export function TextEditor({ draft, errors, onChange }: TextEditorProps) {
+export function TextEditor({ draft, baseline, errors, onChange }: TextEditorProps) {
   const [section, setSection] = useState<string>(SECTIONS[0].id)
   const fields = useMemo(() => collectTextFields(draft), [draft])
   const visible = fields.filter((f) => f.section === section)
@@ -24,7 +24,7 @@ export function TextEditor({ draft, errors, onChange }: TextEditorProps) {
   }, new Map())
 
   const countFor = (id: string) =>
-    fields.filter((f) => f.section === id && getAt(publishedContent, f.path) !== getAt(draft, f.path)).length
+    fields.filter((f) => f.section === id && getAt(baseline, f.path) !== getAt(draft, f.path)).length
 
   return (
     <div className={styles.editorLayout}>
@@ -64,7 +64,7 @@ export function TextEditor({ draft, errors, onChange }: TextEditorProps) {
                   key={field.key}
                   field={field}
                   value={getAt(draft, field.path) as string}
-                  original={getAt(publishedContent, field.path) as string}
+                  original={getAt(baseline, field.path) as string}
                   error={errors.get(field.key)}
                   onChange={(value) => onChange(setText(draft, field.path, value))}
                 />

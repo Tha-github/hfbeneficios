@@ -125,6 +125,21 @@ Publicação via GitHub somente com mecanismo de autorização adequado.
 
 Validar conteúdo e imagens antes da publicação.
 
+### Exceção aprovada — senha do painel (04/11/2026)
+
+O responsável solicitou explicitamente acesso ao `/admin/` por senha, no mesmo modelo dos projetos Weiri e
+Conecta, ciente de que isso flexibiliza as regras acima sobre tokens e senha no frontend. Implementação aceita:
+
+- A chave do GitHub (token fine-grained, restrito a este repositório, permissão única "Contents: Read and write")
+  fica em `public/admin/acesso.json` **cifrada** com a senha (AES-256-GCM, PBKDF2-SHA256 com 600 mil iterações,
+  repositório como dado autenticado). A senha não fica em nenhum arquivo; o token só existe em memória na sessão.
+- Senha mínima de 12 caracteres. O painel só grava `site.json`, as duas imagens e o próprio `acesso.json`,
+  em um único commit, e o build do deploy revalida o conteúdo.
+- Risco residual aceito: o arquivo cifrado é público; uma senha fraca pode ser descoberta offline e dar acesso de
+  escrita ao repositório (exceto workflows). Isso não equivale a autenticação de servidor.
+
+Não estender esta exceção a outros segredos nem a outros mecanismos sem nova autorização.
+
 ## Formulário de contato
 
 O briefing menciona formulário com envio ao WhatsApp, mas a opção selecionada precisa ser confirmada.
