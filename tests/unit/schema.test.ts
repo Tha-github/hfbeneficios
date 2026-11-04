@@ -105,10 +105,15 @@ describe('cores autorizadas', () => {
   it('rejeita contraste insuficiente', () => {
     expect(withTheme({ brand: '#7FA6FF' })).toContain('theme.brand')
     expect(withTheme({ surfaceTint: '#9DB4E8' })).toContain('theme.surfaceTint')
+    // Laranja escuro demais: texto na cor profunda deixaria de ser legível.
+    expect(withTheme({ accent: '#7A3E0A' })).toContain('theme.accent')
   })
 
-  it('aceita uma variação azul com bom contraste', () => {
-    expect(withTheme({ brand: '#1D4ED8', accent: '#0E7490' })).toEqual([])
+  it('aceita as variações oficiais da identidade (azul-petróleo e laranja)', () => {
+    expect(withTheme({})).toEqual([])
+    expect(withTheme({ brand: '#073042', accent: '#F39126' })).toEqual([])
+    // O laranja mais escuro da marca (#C56115) só alcança 3,95:1 com o texto: não serve como cor de destaque.
+    expect(withTheme({ accent: '#C56115' })).toContain('theme.accent')
   })
 })
 

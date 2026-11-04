@@ -2,15 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import type { SiteContent } from '../../content/schema'
 import ui from '../styles/ui.module.css'
 import { Icon } from './Icon'
-import { Logo } from './Logo'
+import { LOGO_TEXT, Logo } from './Logo'
 import styles from './Header.module.css'
 
 interface HeaderProps {
   content: SiteContent['header']
-  siteName: string
 }
 
-export function Header({ content, siteName }: HeaderProps) {
+export function Header({ content }: HeaderProps) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const toggleRef = useRef<HTMLButtonElement>(null)
@@ -51,7 +50,7 @@ export function Header({ content, siteName }: HeaderProps) {
     <header className={`${styles.header} ${scrolled || open ? styles.scrolled : ''}`}>
       <div className={styles.bar}>
         <a className={styles.brand} href="#inicio">
-          <Logo name={`${siteName} — página inicial`} />
+          <Logo label={`${LOGO_TEXT} — página inicial`} />
         </a>
 
         <nav className={styles.desktopNav} aria-label="Principal">

@@ -7,7 +7,7 @@
   overflow: clip;
   background:
     radial-gradient(900px 520px at 88% 8%, color-mix(in srgb, var(--brand) 20%, transparent), transparent 62%),
-    radial-gradient(700px 420px at 0% 100%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 64%),
+    radial-gradient(700px 420px at 0% 100%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 64%),
     linear-gradient(180deg, var(--surface-tint) 0%, color-mix(in srgb, var(--surface-tint) 45%, #fff) 70%, #fff 100%);
 }
 
@@ -148,7 +148,7 @@
   padding: 4px 10px;
   border-radius: var(--radius-pill);
   background: var(--accent-soft);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-size: 0.75rem;
   font-weight: 650;
 }
@@ -306,12 +306,13 @@
   align-content: center;
   padding: 16px 18px;
   background:
-    radial-gradient(120px 80px at 100% 0%, color-mix(in srgb, var(--brand) 55%, transparent), transparent),
+    radial-gradient(120px 80px at 100% 0%, color-mix(in srgb, var(--accent) 30%, transparent), transparent),
     var(--brand-deep);
   color: #fff;
 }
 
 .partnersValue {
+  color: var(--accent);
   font-size: 2.25rem;
   font-weight: 800;
   letter-spacing: -0.04em;

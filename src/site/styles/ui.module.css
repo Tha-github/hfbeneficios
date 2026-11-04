@@ -67,8 +67,8 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--brand);
-  box-shadow: 0 0 0 4px var(--brand-soft);
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
 }
 
 .eyebrowDark {
@@ -80,8 +80,8 @@
 }
 
 .eyebrowDark::before {
-  background: #fff;
-  box-shadow: 0 0 0 4px rgb(255 255 255 / 0.16);
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgb(255 255 255 / 0.12);
 }
 
 .button {

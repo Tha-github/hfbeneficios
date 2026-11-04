@@ -16,7 +16,8 @@ e sem banco de dados. Regras do projeto: [CLAUDE.md](CLAUDE.md).
 | `npm test` | Testes unitários (Vitest). |
 | `npm run test:e2e` | Testes de ponta a ponta (Playwright) contra o build; rode `npm run build` antes. |
 | `npm run validate:content` | Valida `site.json`, `settings.json` e as imagens (o mesmo que o CI executa). |
-| `npm run images:placeholders` | Regera as imagens provisórias a partir das cores da marca. |
+| `npm run images:placeholders` | Regera as composições gráficas (seção institucional e compartilhamento) com cores e logotipo oficiais. |
+| `npm run brand:assets` | Gera logotipos WebP e favicons a partir dos originais em `idvisual/`. |
 | `npm run check` | Lint + unitários + build + E2E. |
 
 ## Estrutura
@@ -112,8 +113,12 @@ buscadores o ignoram. O painel continua protegido por `noindex`; com domínio pr
 
 ## Pendências (dependem do cliente)
 
-- [ ] **Identidade visual oficial** (logotipo e cores). A paleta atual (azul `#1F4FD8`, marinho `#0B1B3F`,
-      verde-petróleo `#0F766E`) e a assinatura “HF” são provisórias.
+- [x] **Identidade visual oficial** aplicada a partir de `idvisual/`: azul-petróleo `#255063` (botões e links),
+      `#0B212E` (textos e seções escuras), laranja `#DB7D1B` (destaques, sempre com texto na cor profunda — o
+      laranja não tem contraste AA com texto branco) e fundo `#EEF4F6`; logotipo horizontal e símbolo oficiais.
+- [ ] **Confirmar o nome exibido**: o logotipo diz “Honorato Freitas Benefícios”, enquanto os textos do site usam
+      “HF Seguros e Benefícios”.
+- [ ] Fonte oficial da marca (só vieram PNGs). O site usa Plus Jakarta Sans, geométrica e próxima do logotipo.
 - [ ] **Confirmar o formulário com envio ao WhatsApp** e informar o número (`whatsappNumber` em
       `settings.json`, formato `55DDDNUMERO`). Até lá, o formulário informa que o canal está em configuração.
 - [ ] **Confirmar plataformas e URLs** de `@hfbeneficios.mt` e `@hfbeneficios` (`social` em `settings.json`).

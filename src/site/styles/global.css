@@ -4,10 +4,10 @@
  * src/content/site.json via módulo virtual; as demais derivam delas.
  */
 :root {
-  --brand: #1f4fd8;
-  --brand-deep: #0b1b3f;
-  --accent: #0f766e;
-  --surface-tint: #eef3ff;
+  --brand: #255063;
+  --brand-deep: #0b212e;
+  --accent: #db7d1b;
+  --surface-tint: #eef4f6;
 
   --ink: var(--brand-deep);
   --ink-muted: color-mix(in srgb, var(--brand-deep) 74%, #fff);
@@ -19,6 +19,10 @@
   --brand-soft: color-mix(in srgb, var(--brand) 9%, #fff);
   --brand-strong: color-mix(in srgb, var(--brand) 82%, var(--brand-deep));
   --accent-soft: color-mix(in srgb, var(--accent) 10%, #fff);
+  /* O laranja da marca não tem contraste AA com texto branco: sobre ele, o texto é a cor profunda;
+     para texto alaranjado sobre fundo claro, usa-se a versão escurecida. */
+  --on-accent: var(--brand-deep);
+  --accent-ink: color-mix(in srgb, var(--accent) 58%, var(--brand-deep));
   --on-dark-muted: color-mix(in srgb, #fff 76%, var(--brand-deep));
 
   --font: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',

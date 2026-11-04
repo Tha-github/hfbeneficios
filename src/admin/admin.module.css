@@ -664,7 +664,7 @@
 
 .alertOk {
   background: var(--accent-soft);
-  color: color-mix(in srgb, var(--accent) 70%, var(--brand-deep));
+  color: var(--accent-ink);
 }
 
 .errorList {
@@ -729,7 +729,7 @@
 }
 
 .checks li[data-ok='true'] {
-  color: color-mix(in srgb, var(--accent) 75%, var(--brand-deep));
+  color: var(--accent-ink);
 }
 
 .checks li[data-ok='false'] {
@@ -795,6 +795,7 @@
 
 .swatchAccent {
   background: var(--accent);
+  color: var(--brand-deep);
 }
 
 .swatchDemo[data-valid='false'] {

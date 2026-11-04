@@ -153,11 +153,11 @@ export function hfSeoPlugin({ siteUrl }: Options): Plugin {
 <meta name="robots" content="noindex">
 <title>Página não encontrada · ${escapeHtml(settings.siteName)}</title>
 <style>
-body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:system-ui,sans-serif;background:#F7F9FC;color:#0B1B3F;padding:24px}
+body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:system-ui,sans-serif;background:#F7FAFB;color:#0B212E;padding:24px}
 main{max-width:480px;text-align:center}
 h1{font-size:2rem;margin:0 0 12px}
-a{display:inline-block;margin-top:16px;padding:14px 24px;border-radius:999px;background:#1F4FD8;color:#fff;text-decoration:none;font-weight:600}
-a:focus-visible{outline:3px solid #0B1B3F;outline-offset:3px}
+a{display:inline-block;margin-top:16px;padding:14px 24px;border-radius:999px;background:#255063;color:#fff;text-decoration:none;font-weight:600}
+a:focus-visible{outline:3px solid #DB7D1B;outline-offset:3px}
 </style>
 </head>
 <body>

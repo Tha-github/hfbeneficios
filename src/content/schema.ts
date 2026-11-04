@@ -64,9 +64,9 @@ export const COLOR_RULES: Record<ColorToken, ColorRule> = {
     check: (t) => [contrastCheck(WHITE, t.brandDeep, 10, 'Texto branco sobre a cor'), hueCheck(t.brandDeep)],
   },
   accent: {
-    label: 'Cor de apoio',
-    usage: 'Detalhes de status e destaque da proteção rural.',
-    check: (t) => [contrastCheck(WHITE, t.accent, 4.5, 'Texto branco sobre a cor'), hueCheck(t.accent)],
+    label: 'Cor de destaque',
+    usage: 'Destaques, selos e faixas de chamada. Textos sobre ela usam a cor profunda.',
+    check: (t) => [contrastCheck(t.brandDeep, t.accent, 4.5, 'Texto na cor profunda sobre a cor'), hueCheck(t.accent)],
   },
   surfaceTint: {
     label: 'Fundo suave',

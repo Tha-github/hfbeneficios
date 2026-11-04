@@ -10,7 +10,7 @@ interface DifferentialsProps {
 }
 
 /** Variações visuais por posição: a estrutura é fixa (8 itens), a hierarquia é intencionalmente irregular. */
-const VARIANTS = ['wide', 'feature', 'plain', 'plain', 'plain', 'plain', 'accent', 'deep'] as const
+const VARIANTS = ['wide', 'feature', 'plain', 'plain', 'plain', 'plain', 'brand', 'deep'] as const
 
 export function Differentials({ content, services }: DifferentialsProps) {
   return (

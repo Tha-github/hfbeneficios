@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { settings } from '../content'
 import type { SiteContent } from '../content/schema'
 import { Icon, type IconName } from '../site/components/Icon'
 import { Logo } from '../site/components/Logo'
@@ -98,7 +97,7 @@ export function AdminApp({ session }: { session: AdminSession }) {
       </a>
       <aside className={styles.sidebar}>
         <div className={styles.sidebarBrand}>
-          <Logo tone="light" name={settings.siteName} />
+          <Logo tone="light" />
           <span className={styles.sidebarTag}>Painel de conteúdo</span>
         </div>
 

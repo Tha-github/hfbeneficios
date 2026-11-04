@@ -31,7 +31,7 @@ export function SiteApp({ content, settings, imageOverrides = {} }: SiteAppProps
       <a className={styles.skip} href="#conteudo">
         Pular para o conteúdo
       </a>
-      <Header content={content.header} siteName={settings.siteName} />
+      <Header content={content.header} />
       <main id="conteudo" tabIndex={-1} className={styles.main}>
         <Hero content={content.hero} services={services} audiences={content.audiences.items} />
         <SpecialtySelector content={content.selector} services={services} />

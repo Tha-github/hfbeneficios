@@ -208,7 +208,7 @@
 
 .success {
   background: var(--accent-soft);
-  color: color-mix(in srgb, var(--accent) 70%, var(--brand-deep));
+  color: var(--accent-ink);
 }
 
 .unavailable {

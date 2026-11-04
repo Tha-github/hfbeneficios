@@ -117,7 +117,7 @@ export function AccessGate() {
   return (
     <div className={styles.gate}>
       <main className={styles.gateCard} aria-labelledby="gate-title">
-        <Logo name={settings.siteName} />
+        <Logo />
         {stage.kind === 'loading' && (
           <p className={styles.cardText} role="status">
             Carregando…

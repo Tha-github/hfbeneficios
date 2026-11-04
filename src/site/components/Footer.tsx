@@ -30,7 +30,7 @@ export function Footer({ content, nav, services, settings }: FooterProps) {
 
         <div className={styles.grid}>
           <div className={styles.brandCol}>
-            <Logo tone="light" name={settings.siteName} />
+            <Logo tone="light" />
             <p>{content.tagline}</p>
             <p className={styles.responsible}>Responsável: {settings.responsible}</p>
           </div>
