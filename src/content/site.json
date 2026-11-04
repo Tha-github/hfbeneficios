@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "HF Seguros e Benefícios | Planos de saúde e seguros",
+    "title": "HF Seguros e Benefícios | Planos de Saúde e Seguros",
     "description": "Corretora de seguros e benefícios com atuação em todo o Brasil: planos de saúde, planos odontológicos, seguro saúde e seguros agrícolas.",
     "ogImageAlt": "HF Seguros e Benefícios — proteção para pessoas, empresas e produtores rurais"
   },
@@ -22,31 +22,31 @@
   },
   "hero": {
     "eyebrow": "Corretora de seguros e benefícios",
-    "title": "Proteção inteligente para cada fase da sua vida e do seu negócio.",
-    "description": "Encontre planos de saúde, benefícios e seguros com atendimento consultivo e soluções personalizadas para você, sua empresa ou sua atividade rural.",
+    "title": "Proteção e tranquilidade para você, sua empresa e seu patrimônio!",
+    "description": "Encontre planos de saúde, benefícios e seguros, com atendimento consultivo e soluções personalizadas para você, sua empresa ou sua família.",
     "primaryCta": "Solicitar cotação",
     "secondaryCta": "Conhecer soluções",
-    "trustNote": "Atendimento para pessoas, famílias, empresas e produtores rurais em todo o Brasil.",
+    "trustNote": "Atendimento para sua família, empresa, ou para sua lavoura, em todo o Brasil.",
     "panel": {
       "label": "Portfólio HF",
-      "title": "Quatro especialidades, um só atendimento",
+      "title": "Várias especialidades, um só atendimento",
       "status": "Sob medida"
     },
     "partnersValue": "+40",
-    "partnersLabel": "operadoras no portfólio",
+    "partnersLabel": "Operadoras no portfólio",
     "coverage": {
       "title": "Atuação em todo o Brasil",
-      "text": "Soluções para você, sua empresa ou sua atividade rural."
+      "text": "Soluções para você, sua empresa ou para sua lavoura."
     },
     "consultive": {
-      "title": "Atendimento consultivo",
-      "text": "Orientação próxima em cada etapa da escolha."
+      "title": "Atendimento Consultivo",
+      "text": "Orientação  em cada etapa que vocês escolher."
     }
   },
   "selector": {
     "eyebrow": "Especialidades",
     "title": "Qual solução você procura?",
-    "description": "Escolha uma especialidade para conhecer as possibilidades e solicitar uma cotação personalizada.",
+    "description": "Escolha uma especialidade e saiba as possibilidades e solicitar uma cotação personalizada.",
     "stepsTitle": "Como funciona a cotação",
     "steps": [
       {
@@ -120,12 +120,12 @@
     "eyebrow": "Sobre a HF",
     "title": "Mais soluções, mais possibilidades e um atendimento que entende suas necessidades.",
     "paragraphs": [
-      "A HF Seguros e Benefícios é uma corretora dedicada a planos de saúde, planos odontológicos, seguro saúde e seguros agrícolas. Reunimos essas soluções em um só lugar para tornar a sua decisão mais simples e segura.",
-      "Com mais de 40 operadoras no portfólio, comparamos alternativas e orientamos cada escolha de forma consultiva, com foco no melhor custo-benefício para pessoas, empresas e produtores rurais em todo o Brasil."
+      "A HF Seguros e Benefícios nasceu com o propósito de oferecer soluções inteligentes em proteção, saúde e segurança patrimonial.\nAtuamos na consultoria de planos de saúde, benefícios empresariais e seguros agrícolas, conectando nossos clientes às soluções disponíveis no mercado por meio de um atendimento próximo, transparente e especializado.",
+      "Com um portfólio de mais de 40 operadoras e parceiros, trabalhamos para identificar alternativas que atendam às necessidades de cada cliente, seja na proteção da saúde, na valorização dos colaboradores ou na segurança da sua lavoura."
     ],
     "pillars": [
       {
-        "title": "Atendimento consultivo",
+        "title": "Atendimento Consultivo",
         "text": "Entendemos o seu contexto antes de indicar qualquer solução."
       },
       {
@@ -162,7 +162,7 @@
     "items": [
       {
         "title": "Mais soluções em um só lugar",
-        "text": "Planos de saúde, odontológicos, seguro saúde e seguros agrícolas com um único ponto de contato."
+        "text": "Um portfólio completo em planos de saúde, planos odontológicos, seguro saúde e seguros agrícolas, atendimento personalizado e centralizado em você."
       },
       {
         "title": "Mais de 40 operadoras no portfólio",
@@ -170,7 +170,7 @@
       },
       {
         "title": "Soluções personalizadas",
-        "text": "Indicações construídas a partir do seu perfil, e não de pacotes prontos."
+        "text": "Cada cliente tem uma necessidade. Analisamos seu perfil e apresentamos soluções alinhadas aos seus objetivos e possibilidades."
       },
       {
         "title": "Foco no melhor custo-benefício",
@@ -190,7 +190,7 @@
       },
       {
         "title": "Atuação em todo o Brasil",
-        "text": "Atendimento para pessoas, empresas e produtores de diferentes regiões do país."
+        "text": "Atendimento especializado em todas as regiões do país."
       }
     ]
   },
@@ -204,7 +204,12 @@
         "id": "pessoas",
         "title": "Pessoas e famílias",
         "description": "Proteção para você e para quem você ama, com orientação em cada escolha.",
-        "points": ["Planos de saúde", "Planos odontológicos", "Seguro saúde", "Orientação personalizada"],
+        "points": [
+          "Planos de saúde",
+          "Planos odontológicos",
+          "Seguro saúde",
+          "Orientação personalizada"
+        ],
         "ctaLabel": "Cotação para mim"
       },
       {
@@ -223,7 +228,11 @@
         "id": "rural",
         "title": "Produtores rurais",
         "description": "Proteção pensada para a rotina e os riscos da atividade no campo.",
-        "points": ["Seguros agrícolas", "Proteção da atividade produtiva", "Orientação conforme necessidades e riscos"],
+        "points": [
+          "Seguros agrícolas",
+          "Proteção da atividade produtiva",
+          "Orientação conforme necessidades e riscos"
+        ],
         "ctaLabel": "Cotação rural"
       }
     ]
@@ -269,7 +278,7 @@
   },
   "footer": {
     "ctaTitle": "Pronto para encontrar a proteção certa?",
-    "ctaText": "Conte o que você procura e receba uma orientação personalizada.",
+    "ctaText": "Conte o que você procura e vamos te ajudar a encontrar uma solução pensada para você.",
     "ctaLabel": "Solicitar cotação",
     "tagline": "Corretora de seguros e benefícios: planos de saúde, planos odontológicos, seguro saúde e seguros agrícolas.",
     "rights": "Todos os direitos reservados."
