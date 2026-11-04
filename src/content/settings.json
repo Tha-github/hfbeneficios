@@ -1,0 +1,15 @@
+{
+  "siteName": "HF Seguros e Benefícios",
+  "responsible": "Elias Freitas",
+  "whatsappNumber": "",
+  "repository": "Tha-github/hfbeneficios",
+  "branch": "main",
+  "social": [
+    { "handle": "@hfbeneficios.mt", "label": "A confirmar", "url": "" },
+    { "handle": "@hfbeneficios", "label": "A confirmar", "url": "" }
+  ],
+  "testimonials": {
+    "enabled": false,
+    "items": []
+  }
+}

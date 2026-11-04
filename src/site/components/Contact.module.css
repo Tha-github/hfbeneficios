@@ -1,0 +1,103 @@
+.shell {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: 40px;
+  padding: clamp(20px, 4vw, 56px);
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(700px 420px at 0% 0%, color-mix(in srgb, var(--brand) 16%, transparent), transparent 70%),
+    radial-gradient(600px 360px at 100% 100%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%),
+    var(--surface-tint);
+}
+
+.shell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--brand-deep) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--brand-deep) 6%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 60% 70% at 20% 30%, #000 10%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 70% at 20% 30%, #000 10%, transparent 75%);
+}
+
+.copy {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 18px;
+}
+
+.aside {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.aside li {
+  display: flex;
+  gap: 14px;
+}
+
+.aside li > span:last-child {
+  display: grid;
+  gap: 2px;
+  line-height: 1.45;
+}
+
+.aside strong {
+  font-weight: 650;
+}
+
+.aside li > span:last-child > span {
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}
+
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.socials a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.socials svg {
+  width: 16px;
+  height: 16px;
+}
+
+.formCard {
+  padding: clamp(20px, 3.5vw, 36px);
+  border: 1px solid rgb(255 255 255 / 0.9);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+}
+
+@media (min-width: 1024px) {
+  .shell {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 64px;
+  }
+
+  .copy {
+    padding-top: 12px;
+  }
+}

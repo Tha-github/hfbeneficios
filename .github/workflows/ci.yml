@@ -1,0 +1,59 @@
+# Validação de todo Pull Request (inclusive os gerados pelo fluxo do painel /admin/).
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Testes unitários
+        run: npm test
+
+      - name: Validação do conteúdo (schema fechado e imagens)
+        run: npm run validate:content
+
+      - name: Build de produção
+        run: npm run build
+
+      - name: Auditoria de dependências de produção
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Navegador para testes E2E
+        run: npx playwright install --with-deps chromium
+
+      - name: Testes de ponta a ponta
+        run: npm run test:e2e
+
+      - name: Relatório do Playwright
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7
