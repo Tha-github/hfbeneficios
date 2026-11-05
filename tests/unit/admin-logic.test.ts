@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { publishedContent } from '../../src/content'
+import { publishedContent } from '../fixtures'
 import { parseImportedContent, saveDraft, loadDraft, serializeContent } from '../../src/admin/draftStorage'
 import { collectTextFields, diffContent, maxLengthAt, setText, validationErrors } from '../../src/admin/fields'
 

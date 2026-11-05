@@ -1,0 +1,277 @@
+{
+  "meta": {
+    "title": "HF Seguros e Benefícios | Planos de saúde e seguros",
+    "description": "Corretora de seguros e benefícios com atuação em todo o Brasil: planos de saúde, planos odontológicos, seguro saúde e seguros agrícolas.",
+    "ogImageAlt": "HF Seguros e Benefícios — proteção para pessoas, empresas e produtores rurais"
+  },
+  "theme": {
+    "brand": "#255063",
+    "brandDeep": "#0B212E",
+    "accent": "#DB7D1B",
+    "surfaceTint": "#EEF4F6"
+  },
+  "header": {
+    "nav": {
+      "solutions": "Soluções",
+      "about": "Sobre",
+      "differentials": "Diferenciais",
+      "audiences": "Para quem",
+      "contact": "Contato"
+    },
+    "ctaLabel": "Solicitar cotação"
+  },
+  "hero": {
+    "eyebrow": "Corretora de seguros e benefícios",
+    "title": "Proteção inteligente para cada fase da sua vida e do seu negócio.",
+    "description": "Encontre planos de saúde, benefícios e seguros com atendimento consultivo e soluções personalizadas para você, sua empresa ou sua atividade rural.",
+    "primaryCta": "Solicitar cotação",
+    "secondaryCta": "Conhecer soluções",
+    "trustNote": "Atendimento para pessoas, famílias, empresas e produtores rurais em todo o Brasil.",
+    "panel": {
+      "label": "Portfólio HF",
+      "title": "Quatro especialidades, um só atendimento",
+      "status": "Sob medida"
+    },
+    "partnersValue": "+40",
+    "partnersLabel": "operadoras no portfólio",
+    "coverage": {
+      "title": "Atuação em todo o Brasil",
+      "text": "Soluções para você, sua empresa ou sua atividade rural."
+    },
+    "consultive": {
+      "title": "Atendimento consultivo",
+      "text": "Orientação próxima em cada etapa da escolha."
+    }
+  },
+  "selector": {
+    "eyebrow": "Especialidades",
+    "title": "Qual solução você procura?",
+    "description": "Escolha uma especialidade para conhecer as possibilidades e solicitar uma cotação personalizada.",
+    "stepsTitle": "Como funciona a cotação",
+    "steps": [
+      {
+        "title": "Conte o que você precisa",
+        "text": "Informe seu perfil e a especialidade de interesse pelo formulário de cotação."
+      },
+      {
+        "title": "Compare alternativas",
+        "text": "Analisamos opções do portfólio de acordo com o seu perfil e as suas prioridades."
+      },
+      {
+        "title": "Escolha com orientação",
+        "text": "Você decide com clareza sobre coberturas, condições e custo-benefício."
+      }
+    ],
+    "requestLabel": "Especialidade selecionada"
+  },
+  "services": {
+    "items": [
+      {
+        "id": "planos-saude",
+        "name": "Planos de Saúde",
+        "tag": "Pessoas, famílias e empresas",
+        "summary": "Soluções para pessoas, famílias e empresas, considerando necessidades de cobertura, atendimento e orçamento.",
+        "highlights": [
+          "Opções para pessoas, famílias e empresas",
+          "Comparação entre operadoras do portfólio",
+          "Orientação sobre rede de atendimento e orçamento"
+        ],
+        "ctaLabel": "Cotar plano de saúde"
+      },
+      {
+        "id": "planos-odontologicos",
+        "name": "Planos Odontológicos",
+        "tag": "Pessoas e empresas",
+        "summary": "Alternativas de proteção odontológica para pessoas e empresas, conforme as opções disponíveis.",
+        "highlights": [
+          "Alternativas para pessoas e empresas",
+          "Opções conforme a disponibilidade das operadoras",
+          "Apoio na escolha do plano mais adequado"
+        ],
+        "ctaLabel": "Cotar plano odontológico"
+      },
+      {
+        "id": "seguro-saude",
+        "name": "Seguro Saúde",
+        "tag": "De acordo com o seu perfil",
+        "summary": "Soluções de seguro saúde de acordo com o perfil, a cobertura desejada e as condições de contratação.",
+        "highlights": [
+          "Análise do perfil e das necessidades",
+          "Comparação de coberturas e condições",
+          "Esclarecimento das regras de contratação"
+        ],
+        "ctaLabel": "Cotar seguro saúde"
+      },
+      {
+        "id": "seguros-agricolas",
+        "name": "Seguros Agrícolas",
+        "tag": "Para quem produz",
+        "summary": "Proteção para atividades rurais, considerando os riscos e as necessidades de cada produtor.",
+        "highlights": [
+          "Orientação conforme a atividade produtiva",
+          "Avaliação dos riscos da operação",
+          "Proteção para o trabalho no campo"
+        ],
+        "ctaLabel": "Cotar seguro agrícola"
+      }
+    ]
+  },
+  "about": {
+    "eyebrow": "Sobre a HF",
+    "title": "Mais soluções, mais possibilidades e um atendimento que entende suas necessidades.",
+    "paragraphs": [
+      "A HF Seguros e Benefícios é uma corretora dedicada a planos de saúde, planos odontológicos, seguro saúde e seguros agrícolas. Reunimos essas soluções em um só lugar para tornar a sua decisão mais simples e segura.",
+      "Com mais de 40 operadoras no portfólio, comparamos alternativas e orientamos cada escolha de forma consultiva, com foco no melhor custo-benefício para pessoas, empresas e produtores rurais em todo o Brasil."
+    ],
+    "pillars": [
+      {
+        "title": "Atendimento consultivo",
+        "text": "Entendemos o seu contexto antes de indicar qualquer solução."
+      },
+      {
+        "title": "Portfólio diversificado",
+        "text": "Mais de 40 operadoras para ampliar as possibilidades de escolha."
+      },
+      {
+        "title": "Soluções personalizadas",
+        "text": "Indicações construídas a partir do seu perfil e das suas prioridades."
+      },
+      {
+        "title": "Atuação nacional",
+        "text": "Atendimento para clientes de diferentes regiões do Brasil."
+      },
+      {
+        "title": "Foco em custo-benefício",
+        "text": "Equilíbrio entre proteção, qualidade e orçamento."
+      }
+    ],
+    "image": {
+      "src": "images/sobre.webp",
+      "alt": "Composição gráfica com as cores da HF Seguros e Benefícios"
+    },
+    "imageCard": {
+      "title": "Uma corretora, quatro especialidades",
+      "text": "Saúde, odontologia, seguro saúde e proteção rural."
+    }
+  },
+  "differentials": {
+    "eyebrow": "Diferenciais",
+    "title": "Por que escolher a HF Seguros e Benefícios",
+    "description": "Uma atuação construída para simplificar decisões importantes, com portfólio amplo e orientação próxima.",
+    "highlightValue": "+40",
+    "items": [
+      {
+        "title": "Mais soluções em um só lugar",
+        "text": "Planos de saúde, odontológicos, seguro saúde e seguros agrícolas com um único ponto de contato."
+      },
+      {
+        "title": "Mais de 40 operadoras no portfólio",
+        "text": "Mais alternativas para comparar coberturas, redes e condições."
+      },
+      {
+        "title": "Soluções personalizadas",
+        "text": "Indicações construídas a partir do seu perfil, e não de pacotes prontos."
+      },
+      {
+        "title": "Foco no melhor custo-benefício",
+        "text": "Equilíbrio entre proteção, qualidade e orçamento em cada recomendação."
+      },
+      {
+        "title": "Atendimento próximo e consultivo",
+        "text": "Orientação clara em cada etapa da escolha e da contratação."
+      },
+      {
+        "title": "Especialização no mercado empresarial",
+        "text": "Benefícios de saúde e odontologia pensados para empresas e suas equipes."
+      },
+      {
+        "title": "Proteção para quem produz",
+        "text": "Seguros agrícolas para proteger a atividade rural e o resultado do trabalho no campo."
+      },
+      {
+        "title": "Atuação em todo o Brasil",
+        "text": "Atendimento para pessoas, empresas e produtores de diferentes regiões do país."
+      }
+    ]
+  },
+  "audiences": {
+    "eyebrow": "Para quem",
+    "title": "Soluções para pessoas, empresas e quem produz",
+    "description": "Cada público tem prioridades diferentes. Por isso, a orientação começa pelo seu contexto.",
+    "featuredBadge": "Especialização empresarial",
+    "items": [
+      {
+        "id": "pessoas",
+        "title": "Pessoas e famílias",
+        "description": "Proteção para você e para quem você ama, com orientação em cada escolha.",
+        "points": ["Planos de saúde", "Planos odontológicos", "Seguro saúde", "Orientação personalizada"],
+        "ctaLabel": "Cotação para mim"
+      },
+      {
+        "id": "empresas",
+        "title": "Empresas",
+        "description": "Benefícios que valorizam colaboradores e apoiam uma gestão mais estratégica.",
+        "points": [
+          "Benefícios para colaboradores",
+          "Soluções de saúde",
+          "Gestão mais estratégica de custos",
+          "Atendimento consultivo"
+        ],
+        "ctaLabel": "Cotação para empresa"
+      },
+      {
+        "id": "rural",
+        "title": "Produtores rurais",
+        "description": "Proteção pensada para a rotina e os riscos da atividade no campo.",
+        "points": ["Seguros agrícolas", "Proteção da atividade produtiva", "Orientação conforme necessidades e riscos"],
+        "ctaLabel": "Cotação rural"
+      }
+    ]
+  },
+  "contact": {
+    "eyebrow": "Cotação",
+    "title": "Vamos encontrar a proteção certa para você",
+    "description": "Preencha os dados abaixo. Ao continuar, o WhatsApp será aberto com uma mensagem pronta para você revisar e enviar.",
+    "aside": [
+      {
+        "title": "Você revisa antes de enviar",
+        "text": "Nada é enviado automaticamente: a mensagem é aberta no seu WhatsApp para conferência."
+      },
+      {
+        "title": "Só o essencial",
+        "text": "Pedimos apenas os dados necessários para iniciar o atendimento."
+      },
+      {
+        "title": "Atendimento em todo o Brasil",
+        "text": "Orientação consultiva para pessoas, empresas e produtores rurais."
+      }
+    ],
+    "form": {
+      "title": "Solicitar cotação",
+      "nameLabel": "Nome",
+      "phoneLabel": "WhatsApp",
+      "phoneHint": "Com DDD, somente números ou no formato (00) 00000-0000.",
+      "clientTypeLabel": "Você é",
+      "clientTypes": {
+        "pessoas": "Pessoa física",
+        "empresas": "Empresa",
+        "rural": "Produtor rural"
+      },
+      "specialtyLabel": "Especialidade de interesse",
+      "cityLabel": "Cidade (opcional)",
+      "stateLabel": "UF (opcional)",
+      "submitLabel": "Continuar no WhatsApp",
+      "privacyNotice": "Usamos estes dados apenas para responder à sua solicitação de cotação. Não informe CPF, documentos ou dados de saúde neste formulário.",
+      "messageIntro": "Olá! Gostaria de solicitar uma cotação com a HF Seguros e Benefícios.",
+      "successMessage": "Abrimos o WhatsApp com a sua mensagem em uma nova aba. Para concluir, revise o texto e toque em enviar.",
+      "unavailableMessage": "O atendimento por WhatsApp está em configuração. Por favor, tente novamente em breve."
+    }
+  },
+  "footer": {
+    "ctaTitle": "Pronto para encontrar a proteção certa?",
+    "ctaText": "Conte o que você procura e receba uma orientação personalizada.",
+    "ctaLabel": "Solicitar cotação",
+    "tagline": "Corretora de seguros e benefícios: planos de saúde, planos odontológicos, seguro saúde e seguros agrícolas.",
+    "rights": "Todos os direitos reservados."
+  }
+}

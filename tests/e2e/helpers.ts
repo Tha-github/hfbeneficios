@@ -1,8 +1,12 @@
 import type { Page } from '@playwright/test'
 import { readFileSync } from 'node:fs'
 import { encryptToken } from '../../src/admin/access'
+import type { Settings, SiteContent } from '../../src/content/schema'
 
-const siteJson: unknown = JSON.parse(readFileSync('src/content/site.json', 'utf8'))
+/** Conteúdo atual: o build testado reflete o que foi publicado pelo painel. */
+export const content = JSON.parse(readFileSync('src/content/site.json', 'utf8')) as SiteContent
+export const settings = JSON.parse(readFileSync('src/content/settings.json', 'utf8')) as Settings
+const siteJson: unknown = content
 
 export const TEST_TOKEN = 'github_pat_11TESTE0000000000000000000000000000000000'
 export const TEST_PASSWORD = 'frase longa de teste da HF'

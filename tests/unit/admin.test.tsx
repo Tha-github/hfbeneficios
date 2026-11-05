@@ -5,7 +5,7 @@ import { encryptToken } from '../../src/admin/access'
 import { AccessGate, type AdminSession } from '../../src/admin/AccessGate'
 import { AdminApp } from '../../src/admin/AdminApp'
 import { utf8ToBase64, type GitHubClient } from '../../src/admin/github'
-import { publishedContent } from '../../src/content'
+import { publishedContent } from '../fixtures'
 
 function fakeSession(overrides: Partial<GitHubClient> = {}): AdminSession {
   return {

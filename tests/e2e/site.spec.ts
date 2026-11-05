@@ -1,8 +1,11 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
-import { loginAdmin } from './helpers'
+import { content, loginAdmin, settings } from './helpers'
 
 const WIDTHS = [320, 375, 390, 430, 768, 1024, 1440, 1920]
+// Os textos vêm do conteúdo atual: podem ser alterados pelo painel sem quebrar os testes.
+const form = content.contact.form
+const [saude, odonto, seguro, agro] = content.services.items
 
 /** Coleta erros de console (inclui violações de CSP) e exceções da página. */
 function trackErrors(page: Page) {
@@ -21,7 +24,7 @@ test.describe('responsividade', () => {
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
       expect(overflow).toBeLessThanOrEqual(0)
-      await expect(page.locator('#inicio').getByRole('link', { name: /Solicitar cotação/ })).toBeInViewport()
+      await expect(page.locator('#inicio').getByRole('link', { name: content.hero.primaryCta })).toBeInViewport()
       const tooSmall = await page.evaluate(() =>
         [...document.querySelectorAll<HTMLElement>('main a, main button, main input, main select')]
           .filter((el) => el.offsetParent !== null && !el.closest('[aria-hidden="true"]'))
@@ -51,8 +54,8 @@ test.describe('acessibilidade (axe, WCAG 2.1 AA)', () => {
   test('formulário com erros continua acessível', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.goto('/#contato')
-    await page.getByRole('button', { name: /Continuar no WhatsApp/ }).click()
-    await expect(page.getByLabel('Nome')).toHaveAttribute('aria-invalid', 'true')
+    await page.getByRole('button', { name: form.submitLabel }).click()
+    await expect(page.getByLabel(form.nameLabel)).toHaveAttribute('aria-invalid', 'true')
     const results = await new AxeBuilder({ page }).include('#contato').withTags(['wcag2a', 'wcag2aa']).analyze()
     expect(results.violations.map((v) => v.id)).toEqual([])
   })
@@ -61,38 +64,39 @@ test.describe('acessibilidade (axe, WCAG 2.1 AA)', () => {
 test.describe('interações', () => {
   test('seletor de especialidades por teclado', async ({ page }) => {
     await page.goto('/')
-    const first = page.getByRole('tab', { name: /Planos de Saúde/ })
+    const first = page.getByRole('tab', { name: saude.name })
     await first.focus()
     await page.keyboard.press('ArrowRight')
-    await expect(page.getByRole('tab', { name: /Planos Odontológicos/ })).toHaveAttribute('aria-selected', 'true')
-    await expect(page.getByRole('tabpanel')).toContainText('Alternativas de proteção odontológica')
+    await expect(page.getByRole('tab', { name: odonto.name })).toHaveAttribute('aria-selected', 'true')
+    await expect(page.getByRole('tabpanel')).toContainText(odonto.summary)
   })
 
   test('link direto abre a especialidade', async ({ page }) => {
     await page.goto('/#seguros-agricolas')
-    await expect(page.getByRole('tab', { name: /Seguros Agrícolas/ })).toHaveAttribute('aria-selected', 'true')
+    await expect(page.getByRole('tab', { name: agro.name })).toHaveAttribute('aria-selected', 'true')
     await expect(page.getByRole('tabpanel')).toBeInViewport()
   })
 
   test('CTA leva ao formulário com a especialidade escolhida', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('tab', { name: /Seguro Saúde/ }).click()
-    await page.getByRole('link', { name: /Cotar seguro saúde/ }).click()
+    await page.getByRole('tab', { name: seguro.name }).click()
+    await page.getByRole('link', { name: seguro.ctaLabel }).click()
     await expect(page).toHaveURL(/#contato$/)
-    await expect(page.getByLabel('Especialidade de interesse')).toHaveValue('seguro-saude')
+    await expect(page.getByLabel(form.specialtyLabel)).toHaveValue('seguro-saude')
   })
 
   test('formulário sem número configurado não abre o WhatsApp', async ({ page }) => {
+    test.skip(settings.whatsappNumber !== '', 'Número de WhatsApp já configurado.')
     await page.goto('/#contato')
-    await page.getByLabel('Nome').fill('Maria Souza')
-    await page.getByLabel('WhatsApp').fill('65999991234')
-    await expect(page.getByLabel('WhatsApp')).toHaveValue('(65) 99999-1234')
-    await page.getByLabel('Produtor rural').check()
-    await page.getByLabel('Especialidade de interesse').selectOption('seguros-agricolas')
+    await page.getByLabel(form.nameLabel).fill('Maria Souza')
+    await page.getByLabel(form.phoneLabel).fill('65999991234')
+    await expect(page.getByLabel(form.phoneLabel)).toHaveValue('(65) 99999-1234')
+    await page.getByLabel(form.clientTypes.rural).check()
+    await page.getByLabel(form.specialtyLabel).selectOption('seguros-agricolas')
     const popup = page.waitForEvent('popup', { timeout: 1000 }).catch(() => null)
-    await page.getByRole('button', { name: /Continuar no WhatsApp/ }).click()
+    await page.getByRole('button', { name: form.submitLabel }).click()
     expect(await popup).toBeNull()
-    await expect(page.getByRole('status').filter({ hasText: /em configuração/ })).toBeVisible()
+    await expect(page.getByRole('status').filter({ hasText: form.unavailableMessage })).toBeVisible()
   })
 
   test('menu móvel', async ({ page }) => {
@@ -101,7 +105,7 @@ test.describe('interações', () => {
     await page.getByRole('button', { name: 'Abrir menu' }).click()
     const menu = page.getByRole('navigation', { name: 'Menu' })
     await expect(menu).toBeVisible()
-    await menu.getByRole('link', { name: 'Diferenciais' }).click()
+    await menu.getByRole('link', { name: content.header.nav.differentials }).click()
     await expect(menu).toBeHidden()
     await expect(page.locator('#diferenciais')).toBeInViewport()
   })
@@ -110,8 +114,8 @@ test.describe('interações', () => {
     const context = await browser.newContext({ javaScriptEnabled: false })
     const page = await context.newPage()
     await page.goto('/')
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('Proteção inteligente')
-    await expect(page.getByText('Mais de 40 operadoras no portfólio').first()).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(content.hero.title)
+    await expect(page.getByText(content.differentials.items[1].title).first()).toBeVisible()
     await context.close()
   })
 })
@@ -119,15 +123,15 @@ test.describe('interações', () => {
 test.describe('SEO e segurança', () => {
   test('metadados, Open Graph, canonical e dados estruturados', async ({ page }) => {
     await page.goto('/')
-    await expect(page).toHaveTitle(/HF Seguros e Benefícios/)
-    expect(await page.locator('meta[name="description"]').getAttribute('content')).toMatch(/planos de saúde/)
+    await expect(page).toHaveTitle(content.meta.title)
+    expect(await page.locator('meta[name="description"]').getAttribute('content')).toBe(content.meta.description)
     expect(await page.locator('link[rel="canonical"]').getAttribute('href')).toMatch(/^https?:\/\//)
     for (const prop of ['og:title', 'og:description', 'og:url', 'og:image', 'og:locale']) {
       expect(await page.locator(`meta[property="${prop}"]`).getAttribute('content')).toBeTruthy()
     }
     const ld = JSON.parse((await page.locator('script[type="application/ld+json"]').textContent()) ?? '{}')
     expect(ld['@type']).toBe('InsuranceAgency')
-    expect(ld.name).toBe('HF Seguros e Benefícios')
+    expect(ld.name).toBe(settings.siteName)
     expect(ld).not.toHaveProperty('address')
     expect(ld).not.toHaveProperty('aggregateRating')
     await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR')
@@ -164,6 +168,6 @@ test.describe('SEO e segurança', () => {
       win.postMessage({ type: 'hf:preview', content: { hero: { title: '<img src=x onerror=alert(1)>' } }, images: {} }, location.origin)
     })
     await page.waitForTimeout(300)
-    await expect(frame.getByRole('heading', { level: 1 })).toContainText('Proteção inteligente')
+    await expect(frame.getByRole('heading', { level: 1 })).toHaveText(content.hero.title)
   })
 })

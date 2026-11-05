@@ -2,8 +2,9 @@ import { describe, expect, it } from 'vitest'
 import { settingsSchema, siteSchema, type SiteContent } from '../../src/content/schema'
 import settingsJson from '../../src/content/settings.json'
 import siteJson from '../../src/content/site.json'
+import { publishedContent as siteFixture, settings as settingsFixture } from '../fixtures'
 
-const clone = (): SiteContent => structuredClone(siteJson) as unknown as SiteContent
+const clone = (): SiteContent => structuredClone(siteFixture)
 const issuesOf = (data: unknown) => {
   const result = siteSchema.safeParse(data)
   return result.success ? [] : result.error.issues.map((i) => i.path.join('.'))
@@ -119,7 +120,7 @@ describe('cores autorizadas', () => {
 
 describe('configurações técnicas', () => {
   it('rejeita links de redes sociais fora dos domínios autorizados ou sem https', () => {
-    const data = structuredClone(settingsJson)
+    const data = structuredClone(settingsFixture)
     data.social[0].url = 'https://phishing.example.com/hf'
     expect(settingsSchema.safeParse(data).success).toBe(false)
     data.social[0].url = 'http://instagram.com/hfbeneficios.mt'
@@ -129,13 +130,13 @@ describe('configurações técnicas', () => {
   })
 
   it('exige depoimentos autorizados', () => {
-    const data = structuredClone(settingsJson) as unknown as { testimonials: { enabled: boolean; items: unknown[] } }
+    const data = structuredClone(settingsFixture) as unknown as { testimonials: { enabled: boolean; items: unknown[] } }
     data.testimonials = { enabled: true, items: [{ name: 'A', context: 'B', quote: 'C', authorized: false }] }
     expect(settingsSchema.safeParse(data).success).toBe(false)
   })
 
   it('valida o formato do número de WhatsApp', () => {
-    const data = structuredClone(settingsJson)
+    const data = structuredClone(settingsFixture)
     data.whatsappNumber = '(65) 99999-0000'
     expect(settingsSchema.safeParse(data).success).toBe(false)
     data.whatsappNumber = '5565999990000'

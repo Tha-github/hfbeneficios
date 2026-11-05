@@ -1,9 +1,9 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { publishedContent, settings } from '../../src/content'
 import type { Settings } from '../../src/content/schema'
 import { SiteApp } from '../../src/site/App'
+import { publishedContent, settings } from '../fixtures'
 
 const renderSite = (overrides: Partial<Settings> = {}) =>
   render(<SiteApp content={publishedContent} settings={{ ...settings, ...overrides }} />)
