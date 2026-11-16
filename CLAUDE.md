@@ -69,7 +69,11 @@ Implementar:
 6. Soluções para pessoas e empresas.
 7. Depoimentos, somente se autorizados e fornecidos.
 8. Contato e captação de leads.
-9. Footer.
+9. Seja Nosso Parceiro — cadastro de corretores, vendedores e empresas (incluído a pedido do cliente em 16/11/2026,
+   com botão no cabeçalho).
+10. Footer.
+
+Foto de fundo quase transparente em todo o site (pedido do cliente em 16/11/2026), substituível pelo painel.
 
 A estrutura deve ser definida em componentes fixos.
 

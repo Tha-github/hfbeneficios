@@ -39,6 +39,7 @@
 
 .brand {
   display: inline-flex;
+  flex-shrink: 0;
   margin-right: auto;
   text-decoration: none;
   border-radius: 12px;
@@ -63,6 +64,7 @@
   font-size: var(--text-sm);
   font-weight: 550;
   text-decoration: none;
+  white-space: nowrap;
   transition:
     color var(--dur) var(--ease),
     background-color var(--dur) var(--ease);
@@ -76,6 +78,40 @@
 .cta {
   display: none;
   min-height: 46px;
+}
+
+/* "Seja Nosso Parceiro": destaque próprio, distinto do menu e da cotação. */
+.partnerLink {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 16px;
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, #fff);
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+  font-size: var(--text-sm);
+  font-weight: 650;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+
+.partnerLink svg {
+  width: 18px;
+  height: 18px;
+}
+
+.partnerLink:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, #fff);
+}
+
+.mobilePartner {
+  color: var(--accent-ink);
 }
 
 .toggle {
@@ -139,7 +175,15 @@
   }
 }
 
-@media (min-width: 960px) {
+/* Com o menu ainda recolhido, o cadastro de parceiros já fica visível ao lado da cotação. */
+@media (min-width: 900px) {
+  .partnerLink {
+    display: inline-flex;
+  }
+}
+
+/* Menu completo só a partir de 1200px: logo, cinco links, parceiro e cotação cabem sem quebrar. */
+@media (min-width: 1200px) {
   .desktopNav {
     display: block;
   }

@@ -30,9 +30,11 @@ export function listenForPreview(apply: (content: SiteContent, images: ImageOver
     const parsed = siteSchema.safeParse(data.content)
     if (!parsed.success) return
 
-    const about = data.images?.about
     const images: ImageOverrides = {}
-    if (typeof about === 'string' && about.startsWith(`blob:${window.location.origin}/`)) images.about = about
+    for (const key of ['about', 'background'] as const) {
+      const url = data.images?.[key]
+      if (typeof url === 'string' && url.startsWith(`blob:${window.location.origin}/`)) images[key] = url
+    }
     apply(parsed.data, images)
   }
 

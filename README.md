@@ -39,7 +39,15 @@ tests/unit, tests/e2e            Vitest e Playwright
 
 Ordem fixa das seções: Header → Hero → Seletor de especialidades (abas com as 4 especialidades e o detalhe de
 cada uma) → Sobre → Diferenciais → Para quem (pessoas, empresas, produtores rurais) → Depoimentos (desativada) →
-Contato/cotação → Rodapé.
+Contato/cotação → Seja Nosso Parceiro → Rodapé.
+
+- **Seja Nosso Parceiro** (pedido do cliente, 16/11/2026): botão em destaque no cabeçalho (e no menu do celular)
+  que leva ao cadastro de corretores, vendedores e empresas interessados em vender os produtos. Pede nome, WhatsApp,
+  perfil e, opcionalmente, e-mail, empresa e cidade/UF; abre o WhatsApp com a mensagem pronta, como a cotação.
+- **Foto de fundo** (pedido do cliente, 16/11/2026): imagem fixa e quase transparente atrás de todo o conteúdo,
+  substituível no painel em **Imagens**. A opacidade baixa e o véu claro mantêm o contraste AA dos textos.
+  Foto atual: [“Family walking on path with trees at sunset”](https://unsplash.com/photos/family-walking-on-path-with-trees-at-sunset-El0yVRiFbxs),
+  de Seljan Salimova, pela [licença Unsplash](https://unsplash.com/license) (uso comercial gratuito, sem exigência de crédito).
 
 ## Painel `/admin/` e publicação
 

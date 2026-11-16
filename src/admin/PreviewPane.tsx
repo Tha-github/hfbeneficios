@@ -23,7 +23,7 @@ export function PreviewPane({ draft, images }: { draft: SiteContent; images: Ima
 
   const send = useCallback(() => {
     frameRef.current?.contentWindow?.postMessage(
-      { type: PREVIEW_MESSAGE, content: draft, images: { about: images.about?.url } },
+      { type: PREVIEW_MESSAGE, content: draft, images: { about: images.about?.url, background: images.background?.url } },
       window.location.origin,
     )
   }, [draft, images])

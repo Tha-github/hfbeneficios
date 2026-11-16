@@ -29,6 +29,7 @@ export const SECTIONS: { id: keyof SiteContent; label: string }[] = [
   { id: 'differentials', label: 'Diferenciais' },
   { id: 'audiences', label: 'Para quem' },
   { id: 'contact', label: 'Contato e formulário' },
+  { id: 'partner', label: 'Seja nosso parceiro' },
   { id: 'footer', label: 'Rodapé' },
 ]
 
@@ -65,7 +66,14 @@ const KEY_LABELS: Record<string, string> = {
   differentials: 'Diferenciais',
   audiences: 'Para quem',
   contact: 'Contato',
+  partner: 'Seja Nosso Parceiro',
   form: 'Formulário',
+  emailLabel: 'Rótulo do e-mail',
+  profileLabel: 'Rótulo do perfil',
+  profiles: 'Perfis',
+  corretor: 'Corretor',
+  vendedor: 'Vendedor',
+  companyLabel: 'Rótulo da empresa',
   nameLabel: 'Rótulo do nome',
   phoneLabel: 'Rótulo do WhatsApp',
   phoneHint: 'Dica do WhatsApp',

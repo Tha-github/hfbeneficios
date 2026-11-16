@@ -54,8 +54,8 @@ test.describe('acessibilidade (axe, WCAG 2.1 AA)', () => {
   test('formulário com erros continua acessível', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.goto('/#contato')
-    await page.getByRole('button', { name: form.submitLabel }).click()
-    await expect(page.getByLabel(form.nameLabel)).toHaveAttribute('aria-invalid', 'true')
+    await page.locator('#contato').getByRole('button', { name: form.submitLabel }).click()
+    await expect(page.locator('#contato').getByLabel(form.nameLabel)).toHaveAttribute('aria-invalid', 'true')
     const results = await new AxeBuilder({ page }).include('#contato').withTags(['wcag2a', 'wcag2aa']).analyze()
     expect(results.violations.map((v) => v.id)).toEqual([])
   })
@@ -82,21 +82,21 @@ test.describe('interações', () => {
     await page.getByRole('tab', { name: seguro.name }).click()
     await page.getByRole('link', { name: seguro.ctaLabel }).click()
     await expect(page).toHaveURL(/#contato$/)
-    await expect(page.getByLabel(form.specialtyLabel)).toHaveValue('seguro-saude')
+    await expect(page.locator('#contato').getByLabel(form.specialtyLabel)).toHaveValue('seguro-saude')
   })
 
   test('formulário sem número configurado não abre o WhatsApp', async ({ page }) => {
     test.skip(settings.whatsappNumber !== '', 'Número de WhatsApp já configurado.')
     await page.goto('/#contato')
-    await page.getByLabel(form.nameLabel).fill('Maria Souza')
-    await page.getByLabel(form.phoneLabel).fill('65999991234')
-    await expect(page.getByLabel(form.phoneLabel)).toHaveValue('(65) 99999-1234')
-    await page.getByLabel(form.clientTypes.rural).check()
-    await page.getByLabel(form.specialtyLabel).selectOption('seguros-agricolas')
+    await page.locator('#contato').getByLabel(form.nameLabel).fill('Maria Souza')
+    await page.locator('#contato').getByLabel(form.phoneLabel).fill('65999991234')
+    await expect(page.locator('#contato').getByLabel(form.phoneLabel)).toHaveValue('(65) 99999-1234')
+    await page.locator('#contato').getByLabel(form.clientTypes.rural).check()
+    await page.locator('#contato').getByLabel(form.specialtyLabel).selectOption('seguros-agricolas')
     const popup = page.waitForEvent('popup', { timeout: 1000 }).catch(() => null)
-    await page.getByRole('button', { name: form.submitLabel }).click()
+    await page.locator('#contato').getByRole('button', { name: form.submitLabel }).click()
     expect(await popup).toBeNull()
-    await expect(page.getByRole('status').filter({ hasText: form.unavailableMessage })).toBeVisible()
+    await expect(page.locator('#contato').getByRole('status').filter({ hasText: form.unavailableMessage })).toBeVisible()
   })
 
   test('menu móvel', async ({ page }) => {
@@ -108,6 +108,37 @@ test.describe('interações', () => {
     await menu.getByRole('link', { name: content.header.nav.differentials }).click()
     await expect(menu).toBeHidden()
     await expect(page.locator('#diferenciais')).toBeInViewport()
+  })
+
+  test('"Seja Nosso Parceiro" no cabeçalho leva ao formulário de cadastro', async ({ page }) => {
+    await page.goto('/')
+    await page.getByRole('banner').getByRole('link', { name: content.header.nav.partner }).click()
+    await expect(page).toHaveURL(/#parceiro$/)
+    const section = page.locator('#parceiro')
+    await expect(section.getByRole('heading', { name: content.partner.title })).toBeInViewport()
+    await expect(section.getByLabel(content.partner.form.nameLabel)).toBeVisible()
+  })
+
+  test('"Seja Nosso Parceiro" também está no menu do celular', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Abrir menu' }).click()
+    await page.getByRole('navigation', { name: 'Menu' }).getByRole('link', { name: content.header.nav.partner }).click()
+    await expect(page.locator('#parceiro').getByRole('heading', { name: content.partner.title })).toBeInViewport()
+  })
+
+  test('foto de fundo carregada, fixa e quase transparente', async ({ page }) => {
+    await page.goto('/')
+    const img = page.locator('img[src$="images/fundo.webp"]')
+    await expect(img).toHaveAttribute('alt', '')
+    const info = await img.evaluate((el: HTMLImageElement) => {
+      const style = getComputedStyle(el)
+      return { loaded: el.complete && el.naturalWidth > 0, opacity: Number(style.opacity), fixed: getComputedStyle(el.parentElement!).position }
+    })
+    expect(info.loaded).toBe(true)
+    expect(info.fixed).toBe('fixed')
+    expect(info.opacity).toBeGreaterThan(0)
+    expect(info.opacity).toBeLessThanOrEqual(0.2)
   })
 
   test('funciona sem JavaScript (HTML pré-renderizado)', async ({ browser }) => {

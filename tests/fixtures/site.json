@@ -16,7 +16,8 @@
       "about": "Sobre",
       "differentials": "Diferenciais",
       "audiences": "Para quem",
-      "contact": "Contato"
+      "contact": "Contato",
+      "partner": "Seja Nosso Parceiro"
     },
     "ctaLabel": "Solicitar cotação"
   },
@@ -204,7 +205,12 @@
         "id": "pessoas",
         "title": "Pessoas e famílias",
         "description": "Proteção para você e para quem você ama, com orientação em cada escolha.",
-        "points": ["Planos de saúde", "Planos odontológicos", "Seguro saúde", "Orientação personalizada"],
+        "points": [
+          "Planos de saúde",
+          "Planos odontológicos",
+          "Seguro saúde",
+          "Orientação personalizada"
+        ],
         "ctaLabel": "Cotação para mim"
       },
       {
@@ -223,7 +229,11 @@
         "id": "rural",
         "title": "Produtores rurais",
         "description": "Proteção pensada para a rotina e os riscos da atividade no campo.",
-        "points": ["Seguros agrícolas", "Proteção da atividade produtiva", "Orientação conforme necessidades e riscos"],
+        "points": [
+          "Seguros agrícolas",
+          "Proteção da atividade produtiva",
+          "Orientação conforme necessidades e riscos"
+        ],
         "ctaLabel": "Cotação rural"
       }
     ]
@@ -264,6 +274,46 @@
       "privacyNotice": "Usamos estes dados apenas para responder à sua solicitação de cotação. Não informe CPF, documentos ou dados de saúde neste formulário.",
       "messageIntro": "Olá! Gostaria de solicitar uma cotação com a HF Seguros e Benefícios.",
       "successMessage": "Abrimos o WhatsApp com a sua mensagem em uma nova aba. Para concluir, revise o texto e toque em enviar.",
+      "unavailableMessage": "O atendimento por WhatsApp está em configuração. Por favor, tente novamente em breve."
+    }
+  },
+  "partner": {
+    "eyebrow": "Seja nosso parceiro",
+    "title": "Venda as soluções da HF com a gente",
+    "description": "Corretores, vendedores e empresas podem se cadastrar para comercializar nossos produtos. Preencha seus dados e a equipe da HF entrará em contato.",
+    "aside": [
+      {
+        "title": "Para corretores, vendedores e empresas",
+        "text": "Cadastro aberto para quem deseja oferecer planos de saúde, odontológicos, seguro saúde e seguros agrícolas."
+      },
+      {
+        "title": "Portfólio amplo",
+        "text": "Mais de 40 operadoras no portfólio para atender diferentes perfis de clientes."
+      },
+      {
+        "title": "Contato pelo WhatsApp",
+        "text": "Você revisa a mensagem antes de enviar. Nada é enviado automaticamente."
+      }
+    ],
+    "form": {
+      "title": "Cadastro de parceiro",
+      "nameLabel": "Nome completo",
+      "phoneLabel": "WhatsApp",
+      "phoneHint": "Com DDD, somente números ou no formato (00) 00000-0000.",
+      "emailLabel": "E-mail (opcional)",
+      "profileLabel": "Você é",
+      "profiles": {
+        "corretor": "Corretor",
+        "vendedor": "Vendedor",
+        "empresa": "Empresa"
+      },
+      "companyLabel": "Empresa ou corretora (opcional)",
+      "cityLabel": "Cidade (opcional)",
+      "stateLabel": "UF (opcional)",
+      "submitLabel": "Enviar cadastro pelo WhatsApp",
+      "privacyNotice": "Usamos estes dados apenas para avaliar e responder ao seu pedido de parceria. Não informe CPF ou documentos neste formulário.",
+      "messageIntro": "Olá! Tenho interesse em ser parceiro da HF Seguros e Benefícios.",
+      "successMessage": "Abrimos o WhatsApp com o seu cadastro em uma nova aba. Para concluir, revise o texto e toque em enviar.",
       "unavailableMessage": "O atendimento por WhatsApp está em configuração. Por favor, tente novamente em breve."
     }
   },

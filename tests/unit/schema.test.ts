@@ -37,6 +37,9 @@ describe('schema fechado do conteúdo', () => {
     const data: Partial<SiteContent> = clone()
     delete data.differentials
     expect(siteSchema.safeParse(data).success).toBe(false)
+    const noPartner: Partial<SiteContent> = clone()
+    delete noPartner.partner
+    expect(siteSchema.safeParse(noPartner).success).toBe(false)
   })
 
   it('rejeita adicionar ou remover itens', () => {

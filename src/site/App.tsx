@@ -7,6 +7,7 @@ import { Differentials } from './components/Differentials'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 import { Hero } from './components/Hero'
+import { PartnerSection } from './components/PartnerSection'
 import { SpecialtySelector } from './components/SpecialtySelector'
 import { Testimonials } from './components/Testimonials'
 import { QuoteProvider } from './lib/quote'
@@ -14,6 +15,7 @@ import styles from './App.module.css'
 
 export interface ImageOverrides {
   about?: string
+  background?: string
 }
 
 interface SiteAppProps {
@@ -28,6 +30,17 @@ export function SiteApp({ content, settings, imageOverrides = {} }: SiteAppProps
 
   return (
     <QuoteProvider>
+      {/* Foto de fundo quase transparente: decorativa, fixa atrás de todo o conteúdo. */}
+      <div className={styles.backdrop} aria-hidden="true">
+        <img
+          src={imageOverrides.background ?? assetUrl('images/fundo.webp')}
+          alt=""
+          width={1920}
+          height={1080}
+          decoding="async"
+          fetchPriority="low"
+        />
+      </div>
       <a className={styles.skip} href="#conteudo">
         Pular para o conteúdo
       </a>
@@ -40,6 +53,7 @@ export function SiteApp({ content, settings, imageOverrides = {} }: SiteAppProps
         <Audiences content={content.audiences} />
         <Testimonials testimonials={settings.testimonials} />
         <Contact content={content.contact} services={services} settings={settings} />
+        <PartnerSection content={content.partner} whatsappNumber={settings.whatsappNumber} />
       </main>
       <Footer content={content.footer} nav={content.header.nav} services={services} settings={settings} />
     </QuoteProvider>

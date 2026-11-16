@@ -12,6 +12,7 @@ export const WRITABLE_PATHS = [
   'src/content/site.json',
   'public/images/sobre.webp',
   'public/images/og-image.jpg',
+  'public/images/fundo.webp',
   ACCESS_FILE_PATH,
 ] as const
 

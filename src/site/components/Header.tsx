@@ -37,7 +37,7 @@ export function Header({ content }: HeaderProps) {
         toggleRef.current?.focus()
       }
     }
-    const onResize = () => window.innerWidth >= 960 && setOpen(false)
+    const onResize = () => window.innerWidth >= 1200 && setOpen(false)
     document.addEventListener('keydown', onKey)
     window.addEventListener('resize', onResize)
     return () => {
@@ -62,6 +62,11 @@ export function Header({ content }: HeaderProps) {
             ))}
           </ul>
         </nav>
+
+        <a className={styles.partnerLink} href="#parceiro">
+          <Icon name="users" />
+          {content.nav.partner}
+        </a>
 
         <a className={`${ui.primary} ${styles.cta}`} href="#contato">
           {content.ctaLabel}
@@ -90,6 +95,12 @@ export function Header({ content }: HeaderProps) {
               </a>
             </li>
           ))}
+          <li>
+            <a className={styles.mobilePartner} href="#parceiro" onClick={() => setOpen(false)}>
+              {content.nav.partner}
+              <Icon name="arrowRight" />
+            </a>
+          </li>
         </ul>
         <a className={`${ui.primary} ${ui.block}`} href="#contato" onClick={() => setOpen(false)}>
           {content.ctaLabel}

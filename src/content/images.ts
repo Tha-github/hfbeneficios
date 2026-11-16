@@ -3,7 +3,7 @@
  * não cria nem remove espaços. Caminhos relativos a /public.
  */
 export interface ImageSlot {
-  id: 'about' | 'og'
+  id: 'about' | 'og' | 'background'
   label: string
   description: string
   file: string
@@ -33,6 +33,16 @@ export const IMAGE_SLOTS: readonly ImageSlot[] = [
     height: 630,
     mime: 'image/jpeg',
     maxBytes: 300 * 1024,
+  },
+  {
+    id: 'background',
+    label: 'Imagem de fundo do site',
+    description: 'Fica quase transparente atrás de todo o conteúdo. Prefira fotos claras e tranquilas. Recorte 16:9.',
+    file: 'images/fundo.webp',
+    width: 1920,
+    height: 1080,
+    mime: 'image/webp',
+    maxBytes: 260 * 1024,
   },
 ] as const
 

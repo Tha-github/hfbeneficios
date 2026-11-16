@@ -8,6 +8,9 @@ import { publishedContent, settings } from '../fixtures'
 const renderSite = (overrides: Partial<Settings> = {}) =>
   render(<SiteApp content={publishedContent} settings={{ ...settings, ...overrides }} />)
 
+/** O formulário de cotação; a página também tem o cadastro de parceiros, com rótulos parecidos. */
+const contactForm = () => within(document.getElementById('contato')!)
+
 describe('site', () => {
   it('tem um único h1 e as seções fixas', () => {
     renderSite()
@@ -49,15 +52,15 @@ describe('site', () => {
     renderSite()
     await user.click(screen.getAllByRole('tab')[3])
     await user.click(screen.getByRole('link', { name: /Cotar seguro agrícola/ }))
-    expect(screen.getByLabelText('Especialidade de interesse')).toHaveValue('seguros-agricolas')
+    expect(contactForm().getByLabelText('Especialidade de interesse')).toHaveValue('seguros-agricolas')
   })
 
   it('mostra erros acessíveis e não abre o WhatsApp com dados inválidos', async () => {
     const open = vi.spyOn(window, 'open').mockImplementation(() => null)
     const user = userEvent.setup()
     renderSite({ whatsappNumber: '5565999990000' })
-    await user.click(screen.getByRole('button', { name: /Continuar no WhatsApp/ }))
-    const name = screen.getByLabelText('Nome')
+    await user.click(contactForm().getByRole('button', { name: /Continuar no WhatsApp/ }))
+    const name = contactForm().getByLabelText('Nome')
     expect(name).toHaveAttribute('aria-invalid', 'true')
     expect(name).toHaveFocus()
     expect(name).toHaveAccessibleDescription('Informe seu nome.')
@@ -69,18 +72,18 @@ describe('site', () => {
     const open = vi.spyOn(window, 'open').mockImplementation(() => null)
     const user = userEvent.setup()
     renderSite({ whatsappNumber: '5565999990000' })
-    await user.type(screen.getByLabelText('Nome'), 'Maria Souza')
-    await user.type(screen.getByLabelText('WhatsApp'), '65999991234')
-    await user.click(screen.getByLabelText('Empresa'))
-    await user.selectOptions(screen.getByLabelText('Especialidade de interesse'), 'planos-odontologicos')
-    await user.click(screen.getByRole('button', { name: /Continuar no WhatsApp/ }))
+    await user.type(contactForm().getByLabelText('Nome'), 'Maria Souza')
+    await user.type(contactForm().getByLabelText('WhatsApp'), '65999991234')
+    await user.click(contactForm().getByLabelText('Empresa'))
+    await user.selectOptions(contactForm().getByLabelText('Especialidade de interesse'), 'planos-odontologicos')
+    await user.click(contactForm().getByRole('button', { name: /Continuar no WhatsApp/ }))
     expect(open).toHaveBeenCalledOnce()
     const [url, target, features] = open.mock.calls[0]
     expect(String(url)).toMatch(/^https:\/\/wa\.me\/5565999990000\?text=/)
     expect(decodeURIComponent(String(url))).toContain('Especialidade: Planos Odontológicos')
     expect(target).toBe('_blank')
     expect(features).toContain('noopener')
-    expect(screen.getByRole('status')).toHaveTextContent(publishedContent.contact.form.successMessage)
+    expect(contactForm().getByRole('status')).toHaveTextContent(publishedContent.contact.form.successMessage)
     open.mockRestore()
   })
 
@@ -88,13 +91,13 @@ describe('site', () => {
     const open = vi.spyOn(window, 'open').mockImplementation(() => null)
     const user = userEvent.setup()
     renderSite({ whatsappNumber: '' })
-    await user.type(screen.getByLabelText('Nome'), 'Maria Souza')
-    await user.type(screen.getByLabelText('WhatsApp'), '65999991234')
-    await user.click(screen.getByLabelText('Pessoa física'))
-    await user.selectOptions(screen.getByLabelText('Especialidade de interesse'), 'seguro-saude')
-    await user.click(screen.getByRole('button', { name: /Continuar no WhatsApp/ }))
+    await user.type(contactForm().getByLabelText('Nome'), 'Maria Souza')
+    await user.type(contactForm().getByLabelText('WhatsApp'), '65999991234')
+    await user.click(contactForm().getByLabelText('Pessoa física'))
+    await user.selectOptions(contactForm().getByLabelText('Especialidade de interesse'), 'seguro-saude')
+    await user.click(contactForm().getByRole('button', { name: /Continuar no WhatsApp/ }))
     expect(open).not.toHaveBeenCalled()
-    expect(screen.getByRole('status')).toHaveTextContent(publishedContent.contact.form.unavailableMessage)
+    expect(contactForm().getByRole('status')).toHaveTextContent(publishedContent.contact.form.unavailableMessage)
     open.mockRestore()
   })
 
@@ -122,6 +125,43 @@ describe('site', () => {
       testimonials: { enabled: true, items: [{ name: 'Cliente', context: 'Empresa', quote: 'Ótimo atendimento.', authorized: true }] },
     })
     expect(screen.getByRole('heading', { name: 'Quem já conta com a HF' })).toBeInTheDocument()
+  })
+
+  it('cabeçalho leva ao cadastro "Seja Nosso Parceiro"', () => {
+    renderSite()
+    const links = screen.getAllByRole('link', { name: publishedContent.header.nav.partner })
+    expect(links.length).toBeGreaterThan(0)
+    for (const link of links) expect(link).toHaveAttribute('href', '#parceiro')
+    expect(document.getElementById('parceiro')).toContainElement(screen.getByRole('heading', { name: publishedContent.partner.title }))
+  })
+
+  it('cadastro de parceiro abre o WhatsApp com os dados informados', async () => {
+    const open = vi.spyOn(window, 'open').mockImplementation(() => null)
+    const user = userEvent.setup()
+    renderSite({ whatsappNumber: '5565999990000' })
+    const form = publishedContent.partner.form
+    const section = within(document.getElementById('parceiro')!)
+    await user.click(section.getByRole('button', { name: form.submitLabel }))
+    expect(section.getByLabelText(form.nameLabel)).toHaveAttribute('aria-invalid', 'true')
+    expect(open).not.toHaveBeenCalled()
+
+    await user.type(section.getByLabelText(form.nameLabel), 'João Lima')
+    await user.type(section.getByLabelText(form.phoneLabel), '65999991234')
+    await user.click(section.getByLabelText(form.profiles.vendedor))
+    await user.click(section.getByRole('button', { name: form.submitLabel }))
+    expect(open).toHaveBeenCalledOnce()
+    const message = decodeURIComponent(String(open.mock.calls[0][0]))
+    expect(message).toContain(form.messageIntro)
+    expect(message).toContain('Perfil: Vendedor')
+    expect(section.getByRole('status')).toHaveTextContent(form.successMessage)
+    open.mockRestore()
+  })
+
+  it('imagem de fundo é decorativa (oculta para leitores de tela)', () => {
+    const { container } = renderSite()
+    const img = container.querySelector('img[src$="images/fundo.webp"]')
+    expect(img).toHaveAttribute('alt', '')
+    expect(img?.closest('[aria-hidden="true"]')).not.toBeNull()
   })
 
   it('menu móvel abre, fecha com Escape e devolve o foco', async () => {

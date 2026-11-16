@@ -19,9 +19,11 @@ interface ImageEditorProps {
   onChange: (next: SiteContent) => void
 }
 
-const ALT_PATHS: Record<ImageSlot['id'], ['about', 'image', 'alt'] | ['meta', 'ogImageAlt']> = {
+/** Caminho do texto alternativo de cada espaço. A imagem de fundo é decorativa e não tem. */
+const ALT_PATHS: Record<ImageSlot['id'], ['about', 'image', 'alt'] | ['meta', 'ogImageAlt'] | null> = {
   about: ['about', 'image', 'alt'],
   og: ['meta', 'ogImageAlt'],
+  background: null,
 }
 
 export function ImageEditor({ draft, baseline, errors, images, onImages, onChange }: ImageEditorProps) {
@@ -29,8 +31,8 @@ export function ImageEditor({ draft, baseline, errors, images, onImages, onChang
     <div className={styles.imageGrid}>
       {IMAGE_SLOTS.map((slot) => {
         const altPath = ALT_PATHS[slot.id]
-        const altValue = altPath[0] === 'about' ? draft.about.image.alt : draft.meta.ogImageAlt
-        const altOriginal = altPath[0] === 'about' ? baseline.about.image.alt : baseline.meta.ogImageAlt
+        const altValue = altPath?.[0] === 'about' ? draft.about.image.alt : draft.meta.ogImageAlt
+        const altOriginal = altPath?.[0] === 'about' ? baseline.about.image.alt : baseline.meta.ogImageAlt
         return (
           <ImageSlotCard
             key={slot.id}
@@ -47,21 +49,25 @@ export function ImageEditor({ draft, baseline, errors, images, onImages, onChang
               })
             }
           >
-            <TextInput
-              field={{
-                path: altPath,
-                key: altPath.join('.'),
-                section: altPath[0],
-                group: '',
-                label: 'Texto alternativo (descrição da imagem para acessibilidade e SEO)',
-                max: maxLengthAt(altPath),
-                multiline: false,
-              }}
-              value={altValue}
-              original={altOriginal}
-              error={errors.get(altPath.join('.'))}
-              onChange={(value) => onChange(setText(draft, altPath, value))}
-            />
+            {altPath ? (
+              <TextInput
+                field={{
+                  path: altPath,
+                  key: altPath.join('.'),
+                  section: altPath[0],
+                  group: '',
+                  label: 'Texto alternativo (descrição da imagem para acessibilidade e SEO)',
+                  max: maxLengthAt(altPath),
+                  multiline: false,
+                }}
+                value={altValue}
+                original={altOriginal}
+                error={errors.get(altPath.join('.'))}
+                onChange={(value) => onChange(setText(draft, altPath, value))}
+              />
+            ) : (
+              <p className={styles.counter}>Imagem decorativa: não precisa de texto alternativo.</p>
+            )}
           </ImageSlotCard>
         )
       })}
