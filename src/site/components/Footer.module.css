@@ -79,17 +79,13 @@
   display: grid;
   justify-items: start;
   gap: 16px;
+  align-content: start;
   max-width: 360px;
 }
 
 .brandCol p {
   color: var(--on-dark-muted);
   font-size: var(--text-sm);
-}
-
-.brandCol .responsible {
-  color: #fff;
-  font-weight: 600;
 }
 
 .colTitle {

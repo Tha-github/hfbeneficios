@@ -132,8 +132,8 @@ buscadores o ignoram. O painel continua protegido por `noindex`; com domínio pr
       Para o visual idêntico em todos os aparelhos, o cliente pode adquirir a licença web da Century Gothic.
       *Champagne & Limousines* (só uso pessoal; web exige autorização da autora) e *Big Noodle Titling* (livre,
       condensada) não foram usadas.
-- [ ] **Confirmar o formulário com envio ao WhatsApp** e informar o número (`whatsappNumber` em
-      `settings.json`, formato `55DDDNUMERO`). Até lá, o formulário informa que o canal está em configuração.
+- [x] **WhatsApp configurado** (17/11/2026): (66) 99951-2221 em `whatsappNumber` (`settings.json`, formato
+      `55DDDNUMERO`), usado pelos formulários de cotação e de parceiros e nos dados estruturados.
 - [ ] **Confirmar plataformas e URLs** de `@hfbeneficios.mt` e `@hfbeneficios` (`social` em `settings.json`).
       Sem URL confirmada, nada é exibido.
 - [ ] **Fotos oficiais** para a seção institucional e a imagem de compartilhamento (hoje: composições gráficas provisórias).

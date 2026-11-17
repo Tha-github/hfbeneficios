@@ -99,6 +99,31 @@ test.describe('interações', () => {
     await expect(page.locator('#contato').getByRole('status').filter({ hasText: form.unavailableMessage })).toBeVisible()
   })
 
+  test('botões de cotação e de parceiro abrem o WhatsApp no número configurado', async ({ page, context }) => {
+    test.skip(settings.whatsappNumber === '', 'Número de WhatsApp ainda não configurado.')
+    // Intercepta o wa.me: nenhuma mensagem real é aberta durante o teste.
+    await context.route('https://wa.me/**', (route) => route.fulfill({ status: 200, body: 'ok' }))
+    await page.goto('/#contato')
+
+    const quote = page.locator('#contato')
+    await quote.getByLabel(form.nameLabel).fill('Teste Automatizado')
+    await quote.getByLabel(form.phoneLabel).fill('65999991234')
+    await quote.getByLabel(form.clientTypes.pessoas).check()
+    await quote.getByLabel(form.specialtyLabel).selectOption('planos-saude')
+    const [quotePopup] = await Promise.all([page.waitForEvent('popup'), quote.getByRole('button', { name: form.submitLabel }).click()])
+    expect(quotePopup.url()).toMatch(new RegExp(`^https://wa\\.me/${settings.whatsappNumber}\\?text=`))
+    expect(decodeURIComponent(quotePopup.url())).toContain('Nome: Teste Automatizado')
+
+    const partner = page.locator('#parceiro')
+    const pf = content.partner.form
+    await partner.getByLabel(pf.nameLabel).fill('Teste Parceiro')
+    await partner.getByLabel(pf.phoneLabel).fill('65999991234')
+    await partner.getByLabel(pf.profiles.corretor, { exact: true }).check()
+    const [partnerPopup] = await Promise.all([page.waitForEvent('popup'), partner.getByRole('button', { name: pf.submitLabel }).click()])
+    expect(partnerPopup.url()).toMatch(new RegExp(`^https://wa\\.me/${settings.whatsappNumber}\\?text=`))
+    expect(decodeURIComponent(partnerPopup.url())).toContain('Perfil: Corretor')
+  })
+
   test('menu móvel', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/')

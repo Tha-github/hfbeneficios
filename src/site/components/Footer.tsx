@@ -32,7 +32,6 @@ export function Footer({ content, nav, services, settings }: FooterProps) {
           <div className={styles.brandCol}>
             <Logo tone="light" />
             <p>{content.tagline}</p>
-            <p className={styles.responsible}>Responsável: {settings.responsible}</p>
           </div>
 
           <nav aria-label="Rodapé" className={styles.col}>

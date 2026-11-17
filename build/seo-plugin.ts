@@ -85,6 +85,8 @@ export function hfSeoPlugin({ siteUrl }: Options): Plugin {
           areaServed: { '@type': 'Country', name: 'Brasil' },
           knowsAbout: content.services.items.map((s) => s.name),
           ...(sameAs.length ? { sameAs } : {}),
+          // Telefone só entra quando confirmado (formato internacional E.164).
+          ...(settings.whatsappNumber ? { telephone: `+${settings.whatsappNumber}` } : {}),
         }
 
         tags.push(
